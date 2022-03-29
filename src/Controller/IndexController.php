@@ -19,8 +19,19 @@ class IndexController extends AbstractController
   }
 
   #[Route(path: "/contact", httpMethod: "GET", name: "contact")]
-  public function contact()
+  public function contactForm()
   {
+    echo $this->twig->render('index/contact.html.twig');
+  }
+
+  #[Route(path: "/contact", httpMethod: "POST", name: "handleContact")]
+  public function handleContactForm(Request $request)
+  {
+    $query = $request->request->all();
+
+    echo '<pre>';
+    var_dump($query);
+    echo '</pre>';
     echo $this->twig->render('index/contact.html.twig');
   }
 }
