@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use PDO;
 
 final class UserRepository extends AbstractRepository
 {
@@ -21,4 +22,17 @@ final class UserRepository extends AbstractRepository
       'birthDate' => $user->getBirthDate()->format('Y-m-d')
     ]);
   }
+
+    public function find(int $id): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM " . static::TABLE . " WHERE id=:id");
+
+        $stmt->execute(['id' => $id]);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, User::class);
+        $result = $stmt->fetch();
+
+
+        return ($result !== false) ? $result : [];
+    }
 }

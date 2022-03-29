@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use PDO;
 
 abstract class AbstractRepository

@@ -9,22 +9,13 @@ use DateTime;
 
 class IndexController extends AbstractController
 {
-  #[Route(path: "/")]
-  public function index(UserRepository $userRepository)
+  #[Route(path: "/", httpMethod: "GET")]
+  public function index()
   {
-    $user = new User();
-
-    $user->setName("Bob")
-      ->setFirstName("John")
-      ->setUsername("Bobby")
-      ->setPassword("randompass")
-      ->setEmail("bob@bob.com")
-      ->setBirthDate(new DateTime('1981-02-16'));
-
-    $userRepository->save($user);
+    echo $this->twig->render('index/home.html.twig');
   }
 
-  #[Route(path: "/contact", name: "contact", httpMethod: "POST")]
+  #[Route(path: "/contact", httpMethod: "GET", name: "contact")]
   public function contact()
   {
     echo $this->twig->render('index/contact.html.twig');

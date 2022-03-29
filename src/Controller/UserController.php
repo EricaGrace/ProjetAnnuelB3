@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use App\Session\SessionInterface;
+use DateTime;
+use Twig\Environment;
 
 class UserController extends AbstractController
 {
@@ -27,5 +30,21 @@ class UserController extends AbstractController
   {
     $user = $userRepository->find($id);
     var_dump($user);
+  }
+
+  #[Route(path: "/user/add", name: "add_user")]
+  public function addUser(UserRepository $userRepository) {
+      $user = new User();
+
+      $user->setName("Bob")
+          ->setFirstName("John")
+          ->setUsername("Bobby")
+          ->setPassword("randompass")
+          ->setEmail("bob@bob.com")
+          ->setBirthDate(new DateTime('1981-02-16'));
+
+      $userRepository->save($user);
+
+      echo "User saved";
   }
 }
