@@ -5,3 +5,4 @@
 /var/
 /.phpunit.cache/
 /coverage/
+composer.lock

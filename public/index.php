@@ -20,6 +20,7 @@ use App\Routing\Router;
 use App\Session\Session;
 use App\Session\SessionInterface;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
 // Env vars - Possibilité d'utiliser le pattern Adapter
@@ -36,11 +37,15 @@ $userRepository = new UserRepository($pdoConnection->getPdoConnection());
 $twigEnvironment = new TwigEnvironment();
 $twig = $twigEnvironment->init();
 
+// Request - symfony/HTTPfoundation
+$request = Request::createFromGlobals();
+
 // Service Container
 $container = new Container();
 $container->set(Environment::class, $twig);
 $container->set(SessionInterface::class, new Session());
 $container->set(UserRepository::class, $userRepository);
+$container->set(Request::class, $request);
 
 // Routage
 $router = new Router($container, new ArgumentResolver());
