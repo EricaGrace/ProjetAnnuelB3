@@ -19,6 +19,7 @@ use App\Routing\RouteNotFoundException;
 use App\Routing\Router;
 use App\Session\Session;
 use App\Session\SessionInterface;
+use App\Utils\Config;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
@@ -40,12 +41,23 @@ $twig = $twigEnvironment->init();
 // Request - symfony/HTTPfoundation
 $request = Request::createFromGlobals();
 
+$config = new Config();
+
 // Service Container
 $container = new Container();
 $container->set(Environment::class, $twig);
 $container->set(SessionInterface::class, new Session());
 $container->set(UserRepository::class, $userRepository);
 $container->set(Request::class, $request);
+$container->set(Config::class, $config);
+
+echo '<pre>';
+//print_r($config->all());
+//print_r($config->get('uploads'));
+//echo $config->get('uploads')['location'];
+//print_r($config('uploads'));
+echo '</pre>';
+
 
 // Routage
 $router = new Router($container, new ArgumentResolver());
