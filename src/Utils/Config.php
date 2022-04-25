@@ -9,7 +9,7 @@ class Config
   /**
    * @var array contains all the configuration values
    */
-  public array $config;
+  public array $config = [];
 
   /**
    * Configuration files directory
@@ -18,7 +18,6 @@ class Config
 
   public function __construct()
   {
-    $this->config = [];
     $this->getConfigurationFiles();
   }
 
