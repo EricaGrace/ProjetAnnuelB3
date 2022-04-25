@@ -2,7 +2,6 @@
 
 namespace App\Utils;
 
-use App\Routing\Route;
 use Exception;
 
 class Config
