@@ -1,78 +1,33 @@
 <?php
 
-// Inclut l'autoloader généré par Composer
 require_once __DIR__ . "/../vendor/autoload.php";
 
 if (
-  php_sapi_name() !== 'cli' &&
-  preg_match('/\.(?:png|jpg|jpeg|gif|ico)$/', $_SERVER['REQUEST_URI'])
+    php_sapi_name() !== 'cli' &&
+    preg_match('/\.(?:png|jpg|jpeg|gif|ico)$/', $_SERVER['REQUEST_URI'])
 ) {
-  return false;
+    return false;
 }
 
-use App\Config\PdoConnection;
-use App\Config\TwigEnvironment;
-use App\DependencyInjection\Container;
-use App\Repository\UserRepository;
-use App\Routing\ArgumentResolver;
+use App\Application;
 use App\Routing\RouteNotFoundException;
 use App\Routing\Router;
-use App\Session\Session;
-use App\Session\SessionInterface;
-use App\Utils\Config;
-use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
-// Env vars - Possibilité d'utiliser le pattern Adapter
-// Pour pouvoir varier les dépendances qu'on utilise
-$dotenv = new Dotenv();
-$dotenv->loadEnv(__DIR__ . '/../.env');
+$app = new Application(dirname(__DIR__));
+$kernel = $app->bindKernel();
 
-// PDO
-$pdoConnection = new PdoConnection();
-$pdoConnection->init(); // Connexion à la BDD
-$userRepository = new UserRepository($pdoConnection->getPdoConnection());
+$app->bootstrap($kernel->getBootstrapers());
 
-// Twig - Vue
-$twigEnvironment = new TwigEnvironment();
-$twig = $twigEnvironment->init();
-
-// Request - symfony/HTTPfoundation
+//TODO: bind request to container
 $request = Request::createFromGlobals();
-
-$config = new Config();
-
-// Service Container
-$container = new Container();
-$container->set(Environment::class, $twig);
-$container->set(SessionInterface::class, new Session());
-$container->set(UserRepository::class, $userRepository);
-$container->set(Request::class, $request);
-$container->set(Config::class, $config);
-
-echo '<pre>';
-//print_r($config->all());
-//print_r($config->get('uploads'));
-//echo $config->get('uploads')['location'];
-//print_r($config('uploads'));
-echo '</pre>';
-
-
-// Routage
-$router = new Router($container, new ArgumentResolver());
-$router->registerRoutes();
-
-if (php_sapi_name() === 'cli') {
-  return;
-}
-
-$requestUri = $_SERVER['REQUEST_URI'];
-$requestMethod = $_SERVER['REQUEST_METHOD'];
+$requestUri = $request->server->get('REQUEST_URI');
+$requestMethod = $request->server->get('REQUEST_METHOD');
 
 try {
-  $router->execute($requestUri, $requestMethod);
+    $app->make(Router::class)->execute($requestUri, $requestMethod);
 } catch (RouteNotFoundException $e) {
-  http_response_code(404);
-  echo $twig->render('404.html.twig', ['title' => $e->getMessage()]);
+    http_response_code(404);
+    echo $app->make(Environment::class)->render('404.html.twig', ['title' => $e->getMessage()]);
 }

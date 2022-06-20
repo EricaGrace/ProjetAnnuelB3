@@ -7,44 +7,44 @@ use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use App\Session\SessionInterface;
 use DateTime;
-use Twig\Environment;
 
 class UserController extends AbstractController
 {
-  #[Route(path: "/users", name: "users_list")]
-  public function list(SessionInterface $session)
-  {
-    $users = [];
+    #[Route(path: "/users", name: "users_list")]
+    public function list(SessionInterface $session)
+    {
+        $users = [];
 
-    echo $this->twig->render(
-      'user/list.html.twig',
-      [
-        'users' => $users,
-        'filter' => $session->get('filter', 'none')
-      ]
-    );
-  }
+        echo $this->twig->render(
+            'user/list.html.twig',
+            [
+                'users' => $users,
+                'filter' => $session->get('filter', 'none')
+            ]
+        );
+    }
 
-  #[Route(path: "/user/edit/{id}", name: "user_edit")]
-  public function edit(UserRepository $userRepository, int $id)
-  {
-    $user = $userRepository->find($id);
-    var_dump($user);
-  }
+    #[Route(path: "/user/edit/{id}", name: "user_edit")]
+    public function edit(UserRepository $userRepository, int $id)
+    {
+        $user = $userRepository->find($id);
+        var_dump($user);
+    }
 
-  #[Route(path: "/user/add", name: "add_user")]
-  public function addUser(UserRepository $userRepository) {
-      $user = new User();
+    #[Route(path: "/user/add", name: "add_user")]
+    public function addUser(UserRepository $userRepository)
+    {
+        $user = new User();
 
-      $user->setName("Bob")
-          ->setFirstName("John")
-          ->setUsername("Bobby")
-          ->setPassword("randompass")
-          ->setEmail("bob@bob.com")
-          ->setBirthDate(new DateTime('1981-02-16'));
+        $user->setName("Bob")
+            ->setFirstName("John")
+            ->setUsername("Bobby")
+            ->setPassword("randompass")
+            ->setEmail("bob@bob.com")
+            ->setBirthDate(new DateTime('now'));
 
-      $userRepository->save($user);
+        $userRepository->save($user);
 
-      echo "User saved";
-  }
+        echo "User saved";
+    }
 }

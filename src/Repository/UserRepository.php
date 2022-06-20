@@ -7,21 +7,21 @@ use PDO;
 
 final class UserRepository extends AbstractRepository
 {
-  protected const TABLE = 'users';
+    protected const TABLE = 'users';
 
-  public function save(User $user): bool
-  {
-    $stmt = $this->pdo->prepare("INSERT INTO users (`name`, firstName, username, `password`, email, birthDate) VALUES (:name, :firstName, :username, :password, :email, :birthDate)");
+    public function save(User $user): bool
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO users (`name`, firstName, username, `password`, email, birthDate) VALUES (:name, :firstName, :username, :password, :email, :birthDate)");
 
-    return $stmt->execute([
-      'name' => $user->getName(),
-      'firstName' => $user->getFirstName(),
-      'username' => $user->getUsername(),
-      'password' => password_hash($user->getPassword(), PASSWORD_BCRYPT),
-      'email' => $user->getEmail(),
-      'birthDate' => $user->getBirthDate()->format('Y-m-d')
-    ]);
-  }
+        return $stmt->execute([
+            'name' => $user->getName(),
+            'firstName' => $user->getFirstName(),
+            'username' => $user->getUsername(),
+            'password' => password_hash($user->getPassword(), PASSWORD_BCRYPT),
+            'email' => $user->getEmail(),
+            'birthDate' => $user->getBirthDate()->format('Y-m-d')
+        ]);
+    }
 
     public function find(int $id): array
     {
@@ -29,9 +29,8 @@ final class UserRepository extends AbstractRepository
 
         $stmt->execute(['id' => $id]);
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, User::class);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetch();
-
 
         return ($result !== false) ? $result : [];
     }
