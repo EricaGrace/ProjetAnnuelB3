@@ -1,0 +1,180 @@
+{% extends 'layout.html.twig' %}
+
+     {% block title %} <h3>BDE Platform </h3>{% endblock %}
+
+{% block body %}
+      
+
+            <h1>Nous te proposons :</h1> 
+       
+                <div id="carousel_categorie" class="carousel slide" data-bs-ride="carousel">
+
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="0" class="active"></button>
+                        <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="1"></button>
+                        <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="2"></button>
+                        <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="3"></button>
+                    </div>
+                 
+                    <div class="carousel-inner" >
+                        <div class="carousel-item active" data-bs-interval="3000">
+                            <a href="evenementsCategorie.html">
+                                <img src="img/icones/bi_person-workspace.svg" alt="afterwork" >
+                                <p>Afterwork</p>
+                            </a>
+                          </div>
+                          <div class="carousel-item" data-bs-interval="3000">
+                            <a href="evenementsCategorie.html">
+                                <img src="img/icones/la_user-friends.svg" alt="integration">
+                                <p>Intégration</p>
+                            </a>
+                          </div>
+                          <div class="carousel-item" data-bs-interval="3000">
+                            <a href="evenementsCategorie.html">
+                                <img src="img/icones/fluent_drink-beer-24-regular.svg" alt="soiree">
+                                <p>Soirée</p>
+                            </a>
+                          </div>
+                          <div class="carousel-item" data-bs-interval="3000">
+                            <a href="evenementsCategorie.html">
+                                <img src="img/icones/icon-park-outline_play-basketball.svg" alt="sport">
+                                <p>Sport</p>
+                            </a>
+                          </div>
+                    </div>
+                  
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel_categorie" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel_categorie" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                    </div>
+                
+                </div>
+            </div>    
+
+    <main>
+        
+        <section id="evenements">
+            <div>
+                <h2>Les évènements</h2>
+                <img src="img/icones/ic_round-event-available.svg" alt="icone evenement">
+            </div>   
+            <div>             
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/bieres.jpg" alt ="afterwork">
+                    <div class="bordureRectangleEvenement">
+                        <p>Afterwork</p>
+                        <p>12/04/2022</p>
+                    </div>
+                </a>
+                    
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/soiree.jpg" alt ="soiree">
+                    <div class="bordureRectangleEvenement">
+                        <p>Soirée</p>
+                        <p>8/05/2022</p>
+                    </div>
+                </a>
+
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/basket.jpg" alt ="basket">
+                    <div class="bordureRectangleEvenement">
+                        <p>Basket</p>
+                        <p>22/05/2022</p>
+                    </div>
+                </a>
+         
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/course_a_pied.jpg" alt ="course a pied">
+                    <div class="bordureRectangleEvenement">
+                        <p>Course à pied</p>
+                        <p>3/07/2022</p>
+                    </div>
+                </a>
+               
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/concert.jpg" alt ="concert">
+                    <div class="bordureRectangleEvenement">
+                        <p>Concert</p>
+                        <p>5/07/2022</p>
+                    </div>
+                </a>
+   
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/festival.jpg" alt ="festival">
+                    <div class="bordureRectangleEvenement">
+                        <p>Festival</p>
+                        <p>5/08/2022</p>
+                    </div>
+                </a>
+      
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/restaurant.jpg" alt ="afterwork">
+                    <div class="bordureRectangleEvenement">
+                        <p>Afterwork</p>
+                        <p>1/09/2022</p>
+                    </div>
+                </a>
+              
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/yoga.jpg" alt ="yoga">
+                    <div class="bordureRectangleEvenement">
+                        <p>Yoga</p>
+                        <p>15/09/2022</p>
+                    </div>
+                </a>
+             
+                <a href="detailsEvenement.html">
+                    <div class="rectanglePleinEvenement"></div>
+                    <img src="img/evenements/afterwork.jpg" alt ="afterwork">
+                    <div class="bordureRectangleEvenement">
+                        <p>Afterwork</p>
+                        <p>26/09/2022</p>
+                    </div>
+                </a>
+         
+            </div>
+
+            <p>
+                <a href="#evenements" id="numPageEvenement">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+            </p>
+
+        </section>
+
+        <section id="rejoinsNous">
+            <div>
+               
+                <div>
+                    <div class="bordureRectangle"></div>
+                    <div class="bordureRectangle"></div>
+                    <div class="rectanglePlein" id="rectanglePleinRejoinsnous"></div>
+                    <img src="img/rejoins-nous.jpg" alt="personnes">
+                </div>
+            </div>
+
+            <div>
+                <h2>Rejoins-nous !</h2>
+                <ul>
+                   <li><p>Crée-toi un compte pour participer aux évènements.</p></li>
+                   <li><a href="inscription.html" class="btnAvecFond">Je m'inscris <i class="fa-solid fa-pencil"></i></a></li>
+                    <li></li><a href="connexion.html" class="btnSansFond">Je me connecte <i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>                 
+                </p>
+            </ul>
+
+        </section>
+       
+    </main>
+ {% endblock %}

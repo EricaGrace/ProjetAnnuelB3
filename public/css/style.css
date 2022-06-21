@@ -1,0 +1,885 @@
+/******************************
+        CSS GLOBAL
+******************************/
+a:hover{
+  color:#3B115D;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+}
+
+.btnAvecFond, button, .labelFichier{
+  background: #3B115D;
+  color:white;
+  padding:11px;
+  border-radius: 8px;
+}
+
+.btnAvecFond i, .btnSansFond i{
+   font-family: 'Font Awesome 6 Free';
+   font-weight: 900;
+   font-size: 15px;
+   padding-left: 2px;
+}
+
+.btnAvecFond:hover{
+  background-color: #FC9A3B;
+}
+
+.btnSansFond{
+  color:#3B115D;
+}
+
+.btnSansFond:hover{
+  color:#FC9A3B;
+}
+
+button, .labelFichier{
+  border: none;
+  cursor: pointer;
+  display:block; 
+  margin: 0 auto;
+}
+
+button:hover, .labelFichier:hover{
+  background-color: #FC9A3B;
+  color: #3B115D;
+}
+
+.categorieSelectionnee{
+  color:#3B115D;
+}
+
+form{
+  margin-top: 20px;
+  background-color: white;
+  padding: 100px;
+  margin-bottom: 100px;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+form .file-name{
+  display: inline;
+  padding-left: 10px;
+}
+
+form .labelFichier{
+  display: inline-block;
+  margin-bottom: 40px;
+}
+
+form input, textarea, select{
+  margin-bottom: 40px;
+  border: solid 1px #FC9A3B;
+  border-radius: 8px;
+  padding: 8px;
+  color: #3B115D;
+}
+
+form input[type="file"]{
+  display: none;
+}
+
+form label, form li{
+  color: #3B115D;
+}
+
+form select{
+  background-color: white;
+}
+
+form textarea{
+  width: 250px;
+  height: 150px;
+}
+
+h1{
+  font-size: 43px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+h1, h2, header nav a p{
+  font-family: 'Neucha', cursive; 
+  font-weight: 400;
+  color: #3B115D;
+}
+
+h1 span, header nav a p span{
+  color:#FC9A3B;
+}
+
+h2{
+  font-size: 30px;
+  margin-top: 0px;
+ 
+}
+
+h2:after{
+   content: url('../img/deco_titre.svg');
+   display: block;
+}
+
+main{
+  margin: 0px 10%;
+}
+
+main section:nth-child(odd) h2:after{
+   transform: rotate(180deg) scaleY(-1);
+   text-align: right;
+}
+
+p{
+  font-size:17px;
+}
+/******************************
+        CLASSES GLOBALES
+******************************/
+.bordureRectangle{
+  position: absolute;
+  border: solid 0.5px white;
+}
+
+.rectanglePlein{
+  background-color: #3B115D;
+  border-radius: 8px;
+  z-index: -2;
+}
+/******************************
+        STYLE PAR SECTION
+******************************/
+
+/*******************
+STYLE SECTION GENERAL
+********************/
+/*
+* header
+*/
+
+header{
+  margin-bottom: 50px;
+}
+
+header > div {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  background-image: linear-gradient(to right, rgb(252, 154, 59, 0.9) , 60%, rgb(59, 17, 93, 0.9)), url(../img/banniere.jpg);
+  background-size: cover;
+  background-position: center;
+  color: black;
+  text-align: center;
+  padding: 10vh 0 10vh 0;
+}
+
+header div div:nth-child(1){
+  text-align: center;
+}
+
+header div div:nth-child(1) img{
+  height: 150px;
+}
+
+header div div:nth-child(2) img{
+  width: 110px;
+  height: 110px;
+  margin-bottom: 10px;
+}
+
+header > div > div:nth-child(2) div{
+  text-align: center;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+header div:last-child{
+  text-align: left;
+}
+
+header > div > div:nth-child(2){
+  color: white;
+}
+
+header div h1{
+  color:white;
+}
+
+header div svg {
+  font-size: 80px;
+  color: white;
+}
+
+header h1{ 
+  text-align: center;
+  font-size: 64px;
+}
+
+header h3{
+  color:white;
+  font-family: 'Neucha', cursive; 
+  font-weight: 400;
+  font-size: 35px;
+}
+
+header nav {
+  padding: 8px 3%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white; 
+}
+
+header nav > a{
+  display: flex;
+}
+
+header nav a p{
+  font-size: 20px;
+}
+
+header nav img{
+  height: 50px;
+  margin-top:0;
+  padding: 0 10px 0 0;
+}
+
+header nav ul {
+  display: flex;
+}
+
+header nav ul li {
+  margin-left: 30px;
+  color:#FC9A3B;
+  font-size: 17px;
+}
+
+/*
+* footer
+*/
+footer{
+  background: linear-gradient(to right, rgb(252, 154, 59, 1), 30%,rgb(59, 17, 93, 1));
+  position: relative;
+  width: 100%;  
+}
+
+footer a,footer ul{
+  z-index: 1;
+}
+
+footer a:hover{
+  color: #FC9A3B;
+}
+
+footer .bordureRectangle:nth-child(1){
+  width: 45%;
+  height: 85%;
+  margin-left: 10%; 
+  top: 15%;
+  border-bottom:none;  
+}
+
+footer .bordureRectangle:nth-child(2){
+  width: 48%;
+  height:85%;
+  margin-left: 50%;
+  border-top:none;
+  bottom:15%; 
+
+}
+
+footer .btnSansFond{
+  color:white;
+}
+
+footer div:nth-child(3){
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 35px 3%;
+  color:white;
+}
+
+footer div > a img{
+  width: 84px;
+}
+
+footer ul li svg{
+  width: 30px;
+  height: 30px;
+  margin-top:30px;
+  margin-right: 15px;
+}
+
+footer ul li, footer p{
+   margin:7px 0px;
+}
+
+/*******************
+STYLE INDEX
+********************/
+/* Header specifique index */
+#accueil{
+  flex-direction: row;
+}
+
+#accueil h1{
+  margin-top: 10px;
+  margin-bottom: 30px;
+  color: #3B115D;
+}
+
+#accueil a:hover{
+  color:white;
+}
+
+#carousel_categorie{
+  width: 30%;
+}
+
+#carousel_categorie p {
+  font-size: 20px;
+  padding-top: 10px;
+  padding-bottom: 50px;
+}
+/* Fin header specifique index */
+
+/*
+* evenements
+*/
+#evenements{
+  margin-bottom: 110px;
+}
+
+#evenements .bordureRectangleEvenement{
+  padding-top: 100px;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  min-width: 260px;
+  border-radius: 8px;
+  margin-top:140px;  
+  margin-bottom: 30px;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+#evenements > div:first-child{
+  display: flex;
+  align-items: flex-start;
+  gap:2%;
+  margin-bottom: 60px;
+  justify-content: center; 
+}
+
+#evenements > div:last-of-type{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 75px 11%;
+  margin-bottom: 80px; 
+}
+
+#evenements > div:last-of-type a:nth-child(even) .bordureRectangleEvenement{
+  border-color: #3B115D;
+}
+
+#evenements > div:last-of-type a:nth-child(even) .rectanglePleinEvenement {
+  background-color:#3B115D;
+}
+
+#evenements  > div:last-of-type div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#evenements > div:last-of-type img{
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  position: absolute;
+  margin-left: 20px;
+  margin-top: 30px;
+  z-index: 1;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+#evenements #numPageEvenement{
+  color:#FC9A3B;
+}
+
+#evenements p{
+  color:#3B115D;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#evenements div p:last-child{
+  color:#FC9A3B;
+}
+
+#evenements .rectanglePleinEvenement{
+  width: 200px;
+  height: 200px;
+  background-color:#FC9A3B;
+  border-radius: 8px 8px 0px 0px;
+  position: absolute;
+}
+
+/*
+* rejoinsNous
+*/
+#rectanglePleinRejoinsnous{
+  width: 365px;
+  height: 365px;
+  position: absolute;
+}
+
+#rejoinsNous{
+  display:flex;
+  align-items: center;
+  gap:15%;
+  text-align: center;
+  margin-bottom: 150px;
+}
+
+#rejoinsNous .bordureRectangle:nth-child(1){
+  width: 280px;
+  height: 180px;
+  margin-top: 50px;
+  z-index: -1;
+}
+
+#rejoinsNous .bordureRectangle:nth-child(2){
+  width: 315px;
+  height: 345px;
+  margin-left: 50px;
+  margin-top: 20px;
+  z-index: -1;
+  border-bottom:none;
+}
+
+#rejoinsNous img{
+  margin-top:65px;
+  margin-left: 65px;
+  width: 360px;
+  height: 360px;
+  object-fit: cover;  
+}
+
+
+#rejoinsNous ul li{
+  margin-top: 30px;
+}
+
+#rejoinsNous ul li:first-child{
+  margin-bottom: 50px;
+  color:#FC9A3B;
+}
+
+/*******************
+STYLE EVENEMENT DETAILLE
+********************/
+
+/*
+* infosEvenement
+*/
+#infosEvenement{
+  display: flex;
+  justify-content: space-between;
+  gap:5%;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+#infosEvenement .bordureRectangle:nth-child(1){
+  width: 240px;
+  height: 280px;
+  margin-left: 100px;
+  z-index: -1;
+}
+
+#infosEvenement .bordureRectangle:nth-child(2){
+  width: 230px;
+  height: 230px;
+  margin-left: 200px;
+  margin-top: 135px;
+  z-index: -1;
+  border-bottom:none;
+}
+
+#infosEvenement > div:first-child img{
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  object-fit: cover;
+}
+
+#infosEvenement > div:last-child p{
+  text-align: center;
+  color:#FC9A3B;
+}
+
+#infosEvenement > div:nth-child(2){
+  width: 50%;
+}
+
+#infosEvenement ul{
+  margin-bottom: 35px;
+}
+
+#infosEvenement ul li p{
+  color: #3B115D;
+}
+
+#infosEvenement #rectanglePleinEvenement{
+  width: 365px;
+  height: 365px;
+  margin-top: 170px;
+  margin-left: 100px;
+  position:relative;
+}
+
+/*
+* adresseEvenement
+*/ 
+
+#adresseEvenement{
+  margin-bottom: 150px;
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#adresseEvenement .bordureRectangle:nth-child(1), #adresseEvenement .bordureRectangle:nth-child(2){
+  z-index: -1;
+}
+
+#adresseEvenement .bordureRectangle:nth-child(1){
+  width: 380px;
+  height: 540px;
+  margin-left: 400px;
+  margin-top: 10px;
+  border-bottom:none;
+}
+
+#adresseEvenement .bordureRectangle:nth-child(2){
+  width: 520px;
+  height: 300px;
+  margin-left: 300px;
+  margin-top: 135px;
+}
+
+#adresseEvenement > div:first-child{
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#adresseEvenement > div div:nth-child(3){
+  width: 550px;
+  height: 550px;
+  margin-left: 300px;
+  position:relative;
+}
+
+#adresseEvenement iframe{
+  width:680px;
+  height:439px;
+  border: solid 7px #FC9A3B;
+  position: absolute;
+  margin-top: 50px;
+}
+
+#adresseEvenement i{
+  font-size: 70px;
+  color: #fc9a3b;
+}
+
+/*******************
+STYLE MON COMPTE
+********************/
+
+/*
+* infosPerso
+*/
+#infosPerso div, #formulaire div, #formulaire form{
+  display: flex;
+  justify-content: center;
+}
+
+#infosPerso div h2, #inscriptions h2{
+  margin-bottom: 0;
+}
+
+#infosPerso div:nth-child(2){
+ align-items: center;
+ gap: 3%;
+}
+
+#infosPerso div ul:first-child li p{
+  color: #FC9A3B;
+}
+
+#infosPerso div ul:last-child li p{
+  color: #3B115D;
+}
+
+/*
+* inscriptions
+*/
+#inscriptions{
+  margin-top: 30px;
+  text-align: right;
+  flex-direction: column;
+  align-items: center !important;
+}
+
+/*******************
+STYLE ADMINISTRATION
+********************/
+header div ul{
+  display: flex;
+  margin-top: 70px;
+  
+}
+
+header div ul li{
+  padding-right: 20px;
+  color: white;
+}
+
+header div ul li a{
+  border: solid 1px white;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+header div ul li a:hover, .menuSelectionne{
+  border-color: #3B115D;
+}
+
+.menuSelectionne{
+  color:#3B115D;
+}
+
+/*
+* formulaire
+*/
+
+#formulaire{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+#formulaire form{
+  padding: 100px !important;
+ }
+
+ /******************************
+        RESPONSIVE
+******************************/
+@media (max-width: 767px) {
+
+  #accueil{
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  #accueil, #evenements > div:last-of-type, #evenements div:first-of-type, #rejoinsNous, footer div:nth-child(3){
+    flex-direction: column;
+  }
+
+  #accueil h1{ 
+    text-align: center;
+    font-size: 45px;
+  }
+
+  #carousel_categorie{
+    width: 100%;
+  }
+  
+  #evenements{
+    margin-bottom: 50px;
+  }
+
+  #evenements > div:last-of-type, #evenements div:first-of-type{
+    align-items: center;
+  }
+
+  #evenements > div:last-of-type, #rejoinsNous{
+    margin-bottom: 50px;
+  }
+ 
+  #evenements h2, main{
+    margin:0;
+  }
+  
+  footer .bordureRectangle:nth-child(1){
+    width: 80%;
+    height: 98%;
+    margin-left: 10%; 
+    top: 2%;
+  }
+  
+  footer .bordureRectangle:nth-child(2){
+    width: 98%;
+    height:97%;
+    margin-left: 0;
+    bottom:3%; 
+  }
+ 
+  footer div:nth-child(3){
+    align-items: flex-start;
+    padding: 10% 20% 10% 20%;
+  }
+
+  footer div:nth-child(3) ul:nth-of-type(3),  footer div:nth-child(3) a {
+    align-self: center ;
+  }
+
+  footer ul li svg{
+    width: 35px;
+    height: 35px;
+  }
+  
+  header > div {
+    background-image: linear-gradient(to bottom, rgb(252, 154, 59, 0.9) , 60%, rgb(59, 17, 93, 0.9)), url(../img/banniere.jpg);
+  }
+
+  header div svg {
+    font-size: 50px;
+  }
+
+ header h1{
+    font-size: 55px;
+  }
+
+  #rejoinsNous div:first-of-type, #infosEvenement > div:first-child  {
+    align-self: flex-start;
+    margin-bottom: 25px;
+  }
+
+  #rectanglePleinRejoinsnous{
+    width: 320px;
+    height: 320px;
+    border-radius: 0 8px 8px 0;
+  }
+   
+  #rejoinsNous .bordureRectangle:nth-child(2){
+    width: 270px;
+    height: 300px;
+  }
+  
+  #rejoinsNous img{
+    width: 280px;
+    height: 280px;
+  }
+}
+
+@media (min-width:767px) and (max-width:991px){
+
+  #evenements{
+    margin: 0px 10%;
+  }
+
+  #infosEvenement > div:first-child{
+    margin-bottom: 25px;
+  }
+
+  main{
+    margin:0;
+  }
+
+  #rejoinsNous{
+    margin-top: 50px;
+    gap:10px;
+    justify-content: center;
+  }
+
+}
+
+@media (max-width:991px){
+  nav ul li, header div ul{
+    display: none;
+  }
+
+  #adresseEvenement{
+    margin-bottom: 120px;
+    margin-left:0;
+  }
+  
+  #adresseEvenement .bordureRectangle:nth-child(1){
+    width: 90%;
+    margin-left: 10%;
+    border-right: none;
+  }
+  
+  #adresseEvenement .bordureRectangle:nth-child(2){
+    width: 80%;
+    height: 500px;
+    margin-left: 0px;
+    margin-top: 30px;
+    border-left: none;
+  }
+  
+  #adresseEvenement > div div:nth-child(3){
+    width: 100%;
+    margin-left: 0px;
+    border-radius: 0px;
+  }
+  
+  #adresseEvenement iframe{
+    width:100%;
+  }
+
+  #formulaire form{
+    padding: 20% !important;
+    margin-bottom: 70px;
+  }
+
+  #infosEvenement{
+    flex-direction: column;
+  }
+
+  #infosEvenement .bordureRectangle:nth-child(2){
+    width: 150px;
+    height: 220px;
+    margin-left: 200px;
+    margin-top: 100px;
+    border-right:none;
+  }
+
+  #infosEvenement > div:first-child img{
+    width: 320px;
+    height: 320px;
+  }
+
+  #infosEvenement > div:nth-child(2) {
+    width: 80%;
+    text-align: center;
+    order: 2;
+  }
+
+  #infosEvenement > div:nth-child(3), #infosEvenement > div:nth-child(3) p{
+    margin-top: 0;
+  }
+
+  #infosEvenement > div:nth-child(3) p{
+    margin-bottom: 0;
+  }
+
+  #infosEvenement > div:nth-child(2) ul li:nth-child(3){
+    text-align: left;
+  }
+
+  #infosEvenement #rectanglePleinEvenement{
+    width: 320px;
+    height: 320px;
+    margin-top: 100px;
+    margin-left: 30px;
+  }
+}

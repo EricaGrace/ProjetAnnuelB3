@@ -1,0 +1,67 @@
+{% extends 'layout.html.twig' %}
+ 
+{% block title %} Administration{% endblock %} 
+       
+
+{% block body %}
+               <div> 
+                <span class="iconify" data-icon="bytesize:settings"></span>
+                <ul>
+                    <li><a href="ajouterEvenement.html">Ajouter un évènement</a></li>
+                    <li><a href="modifierEvenement.html" class="menuSelectionne">Modifier un évènement</a></li>
+                    <li><a href="supprimerEvenement.html">Supprimer un évènement</a></li>
+                    <li><a href="ajouterCategorie.html">Ajouter une catégorie</a></li>
+                    <li><a href="ajouterUtilisateur.html">Ajouter un utilisateur</a></li>
+                </ul>
+            </div>    
+
+
+    <main>
+      <section id="formulaire">
+          <div><h2>Modifier un évènement</h2></div>
+          <form action="" method="post" enctype="multipart/form-data">
+              <ul>
+                  <li>
+                    <label for="event">Evènement</label><br>
+                    <select id="event" name="event">
+                      <option value="afterwork">Afterwork 12/04/2022</option>
+                      <option value="soiree">Soirée 8/05/2022</option>
+                      <option value="basket">Basket 22/05/2022</option>
+                    </select>
+                  </li>
+                  <li>
+                    <label for="title">Titre</label> <br> 
+                    <input type="text" name="title" id="title" value="Titre">
+                  </li>
+                  <li>
+                    <label for="date">Date</label> <br> 
+                    <input type="date" name="date" id="date" value="2022-04-03">
+                  </li>
+                  <li>
+                    <label for="price">Prix</label> <br> 
+                    <input type="number" name="price" id="price" value="12">
+                  </li>
+                  <li>
+                    <label for="places">Nombre de places</label> <br> 
+                    <input type="number" name="places" id="places" value="15">
+                  </li>
+                  <li>Image</li>
+                  <li>
+                    <label for="file" class="labelFichier">Télécharger <i class="fa-solid fa-arrow-up-from-bracket"></i></label>
+                    <input type="file" name="image" id="file">
+                    <p class="file-name">monfichier.png</p>
+                  </li>
+                  <li>
+                    <label for="description">Description</label> <br> 
+                    <textarea name="description" id="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet voluptas quidem blanditiis, id odit magni vitae debitis, recusandae quam iure</textarea>
+                  </li>
+                  <li>
+                    <button  type="submit">Envoyer <i class="fa-solid fa-arrow-right"></i></button>
+                  </li>
+              </ul>
+        </form>
+      </section>
+       
+    </main>
+    {% block javascripts %}<script src="js/uploadfile.js"></script>{% endblock %}
+{% endblock %}

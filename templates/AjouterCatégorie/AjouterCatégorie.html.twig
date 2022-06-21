@@ -1,0 +1,43 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} <h1>Administration</h1> {% endblock %}
+
+{% block javascripts %} <script src="js/uploadfile.js"></script>  {% endblock %}
+ 
+{% block body %}
+           
+            <div>
+                <span class="iconify" data-icon="bytesize:settings"></span>
+                <ul>
+                    <li><a href="ajouterEvenement.html">Ajouter un évènement</a></li>
+                    <li><a href="modifierEvenement.html">Modifier un évènement</a></li>
+                    <li><a href="supprimerEvenement.html">Supprimer un évènement</a></li>
+                    <li><a href="ajouterCategorie.html" class="menuSelectionne">Ajouter une catégorie</a></li>
+                    <li><a href="ajouterUtilisateur.html">Ajouter un utilisateur</a></li>
+                </ul>
+            </div>    
+
+    <main>
+      <section id="formulaire">
+          <div><h2>Ajouter une catégorie</h2></div>
+          <form action="" method="post" enctype="multipart/form-data">
+              <ul>
+                  <li>
+                    <label for="name">Nom</label> <br> 
+                    <input type="text" name="name" id="name">
+                  </li>           
+                  <li>Icône</li>
+                  <li>
+                    <label for="file" class="labelFichier">Télécharger <i class="fa-solid fa-arrow-up-from-bracket"></i></label>
+                    <input type="file" name="image" id="file">
+                    <p class="file-name"></p>
+                  </li>
+                  <button  type="submit">Ajouter <i class="fa-solid fa-plus"></i></button>
+                  </li>
+              </ul>
+        </form>
+      </section>
+       
+    </main>
+{% endblock %}
+    

@@ -1,0 +1,58 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} <h1>Administration</h1> {% endblock %}
+
+{% block javascripts %} <script src="js/uploadfile.js"></script>  {% endblock %}
+
+{% block body %}      
+            <div>
+                <span class="iconify" data-icon="bytesize:settings"></span>
+                <ul>
+                    <li><a href="ajouterEvenement.html" class="menuSelectionne">Ajouter un évènement</a></li>
+                    <li><a href="modifierEvenement.html">Modifier un évènement</a></li>
+                    <li><a href="supprimerEvenement.html">Supprimer un évènement</a></li>
+                    <li><a href="ajouterCategorie.html">Ajouter une catégorie</a></li>
+                    <li><a href="ajouterUtilisateur.html">Ajouter un utilisateur</a></li>
+                </ul>
+            </div>    
+    <main>
+      <section id="formulaire">
+          <div><h2>Ajouter un évènement</h2></div>
+          <form action="" method="post" enctype="multipart/form-data">
+              <ul>
+                  <li>
+                    <label for="title">Titre</label> <br> 
+                    <input type="text" name="title" id="title">
+                  </li>
+                  <li>
+                    <label for="date">Date</label> <br> 
+                    <input type="date" name="date" id="date">
+                  </li>
+                  <li>
+                    <label for="price">Prix</label> <br> 
+                    <input type="number" name="price" id="price">
+                  </li>
+                  <li>
+                    <label for="places">Nombre de places</label> <br> 
+                    <input type="number" name="places" id="places">
+                  </li>
+                  <li>Image</li>
+                  <li>
+                    <label for="file" class="labelFichier">Télécharger <i class="fa-solid fa-arrow-up-from-bracket"></i></label>
+                    <input type="file" name="image" id="file">
+                    <p class="file-name"></p>
+                  </li>
+                  <li>
+                    <label for="description">Description</label> <br> 
+                    <textarea name="description" id="description"></textarea>
+                  </li>
+                  <li>
+                    <button  type="submit">Ajouter <i class="fa-solid fa-plus"></i></button>
+                  </li>
+              </ul>
+        </form>
+      </section>
+       
+    </main>
+    
+{% endblock %}
