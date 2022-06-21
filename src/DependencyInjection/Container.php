@@ -2,7 +2,6 @@
 
 namespace App\DependencyInjection;
 
-use App\Database\Hydration\HydratorInterface;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -31,7 +30,6 @@ class Container implements ContainerInterface
 
     public function make(mixed $id, mixed ...$arguments): ?object
     {
-
         try {
             $service = $this->get($id);
         } catch (ServiceNotFoundException) {
@@ -64,12 +62,8 @@ class Container implements ContainerInterface
 
             $class = $parameter->getType()->getName();
 
-            if (!$this->has($class)) {
-                $param = $this->make($class);
-                $parameters[] = $param;
-            } else {
-                $parameters[] = $this->get($class);
-            }
+            $param = $this->make($class);
+            $parameters[] = $param;
         }
 
         $instance = $reflected->newInstance(...array_merge($parameters, $arguments));
