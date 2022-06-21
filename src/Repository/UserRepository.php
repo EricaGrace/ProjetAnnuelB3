@@ -8,6 +8,7 @@ use PDO;
 final class UserRepository extends AbstractRepository
 {
     protected const TABLE = 'users';
+    protected const ENTITY = User::class;
 
     public function save(User $user): bool
     {
@@ -23,15 +24,14 @@ final class UserRepository extends AbstractRepository
         ]);
     }
 
-    public function find(int $id): array
+    public function find(int $id): User
     {
         $stmt = $this->pdo->prepare("SELECT * FROM " . static::TABLE . " WHERE id=:id");
 
         $stmt->execute(['id' => $id]);
-
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetch();
 
-        return ($result !== false) ? $result : [];
+        return $this->hydrate($result);
     }
 }
