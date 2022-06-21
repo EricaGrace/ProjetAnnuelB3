@@ -2,7 +2,9 @@
 
 namespace App\Database\Hydration;
 
+use App\Entity\Entity;
+
 interface HydratorInterface
 {
-    public function hydrate(array $values, object $entity);
+    public function hydrate(array $values, Entity $object): Entity;
 }
