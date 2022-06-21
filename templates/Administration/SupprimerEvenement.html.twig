@@ -1,9 +1,10 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %} <h1>Administration</h1> {% endblock %}
+{% block title %} Supprimer un évènement {% endblock %}
 
-{% block body %}
-            <div>   
+{% block header %}
+            <div> 
+                 <h1>Administration</h1>   
                 <span class="iconify" data-icon="bytesize:settings"></span>
                 <ul>
                     <li><a href="ajouterEvenement.html">Ajouter un évènement</a></li>
@@ -12,7 +13,9 @@
                     <li><a href="ajouterCategorie.html">Ajouter une catégorie</a></li>
                     <li><a href="ajouterUtilisateur.html">Ajouter un utilisateur</a></li>
                 </ul>
-            </div>    
+            </div> 
+  {% endblock %}
+  {% block body %}   
     <main>
       <section id="formulaire">
           <div><h2>Supprimer un évènement</h2></div>

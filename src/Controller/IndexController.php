@@ -13,7 +13,7 @@ class IndexController extends AbstractController
   #[Route(path: "/", httpMethod: "GET")]
   public function index(Request $request)
   {
-    echo $this->twig->render('index/index.html.twig', [
+    echo $this->twig->render('index.html.twig', [
         'request' => $request
     ]);
   }
@@ -41,4 +41,11 @@ class IndexController extends AbstractController
   {
     echo $this->twig->render('connexion/login.html.twig');
   }
+
+  #[Route(path: "/compte", name: "MonCompte", httpMethod: "GET")]
+  public function inscription()
+  {
+    echo $this->twig->render('MonCompte/MonCompte.html.twig');
+  }
 }
+  

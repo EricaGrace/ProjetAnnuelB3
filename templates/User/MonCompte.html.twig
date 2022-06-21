@@ -1,11 +1,14 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %} <h1>Bonjour {{firstname}} !</h1>  {% endblock %}
+{% block title %} Mon compte {% endblock %}
 
-{% block body %}
-       <div>
+{% block header %}
+             <div>
+                <h1>Bonjour Mélanie !</h1> 
                 <span class="iconify" data-icon="icon-park-outline:people"></span>
-            </div>    
+            </div>
+    {% endblock %}
+    {% block body %}    
     <main>
       <section id="infosPerso">
           <div><h2>Tes informations personnelles</h2></div>
@@ -18,11 +21,11 @@
                   <li><p>Rôle</p></li>
               </ul>
               <ul>
-                <li><p>{{firstname}}</p></li>
-                <li><p>{{name|upper}}</p></li>
-                <li><p>{{email}}</p></li>
-                <li><p>{{phone}}</p></li>
-                <li><p>{{role}}</p></li>
+                 <li><p>Mélanie</p></li>
+                <li><p>Durand</p></li>
+                <li><p>melaniedurand@exemple.com</p></li>
+                <li><p>07 58 69 15 89</p></li>
+                <li><p>Administrateur</p></li>
             </ul>
           </div>
       </section>

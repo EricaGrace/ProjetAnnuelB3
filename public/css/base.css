@@ -30,46 +30,7 @@ a:active {
   color: inherit;
 }
 
-label,#toggle{
-  display: none;
-}
-
-@media all and (max-width: 991px)
-{
-    ul
-    {
-        height: 60px;
-    }
- 
-    ul .menu 
-    {
-        display: none;
-        flex-direction: column;
-        height: 220px;
-    }
- 
-    label 
-    {
-        width: 30px;
-        display: flex;
-        justify-content: left;
-        align-items: center;
-        margin: 0 auto;
-        font-size: 40px;
-        color: black;
-        cursor: pointer;
-    }
-
-    ul .menu a {
-      width: 50%;
-  }
-
-    #toggle:checked + .menu {
-      display: flex;
-  }
-}
-
-ul .menu {
+ul {
   list-style: none;
   padding-left: 0;
 }

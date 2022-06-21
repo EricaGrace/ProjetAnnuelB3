@@ -7,16 +7,16 @@
         <link rel="icon" type="image/x-icon" href="/img/logos/favicon.ico">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        {% block stylesheets %}
         <link href="https://fonts.googleapis.com/css2?family=Neucha&family=Open+Sans&display=swap" rel="stylesheet">
+         {% block link %}{% endblock %}
         <link rel="stylesheet" href="/css/normalize.css">
         <link rel="stylesheet" href="/css/base.css">
         <link rel="stylesheet" href="/css/all.css">
         <link rel="stylesheet" href="/css/style.css">
         {% endblock %}
-        {% endblock %}
     </head>
     <body>
+    <header>
         <nav>
                 <a href="index.html">
                     <img src="img/logos/logo_colore.png" alt="logo">
@@ -31,7 +31,8 @@
                     <li><a href="inscription/inscription.html.twig" class="btnAvecFond">Je m'inscris <i class="fa-solid fa-pencil"></i></a></li>
                 </ul>
         </nav>
-
+        {% block header %} {% endblock %} 
+</header>
         {% block pagetitle %}{% endblock %}
         
 

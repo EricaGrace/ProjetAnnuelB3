@@ -1,20 +1,10 @@
-{% extends 'layout.html.twig' %}
-
+{% extends 'layoutad.html.twig' %}
 
 {% block title %}Je me connecte{% endblock %}
 
-  {% block stylesheets %}
-        <link href="https://fonts.googleapis.com/css2?family=Neucha&family=Open+Sans&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{ assets ('css/normalize.css') }}">
-        <link rel="stylesheet" href="{{ assets ('css/base.css') }}">
-        <link rel="stylesheet" href="asset{{ ('css/all.css') }}">
-        <link rel="stylesheet" href="asset{{ ('css/style.css') }}">
-        {% endblock %}
-
 {# Ici vous mettez vos codes HTML et balises Twig au besoin #}
 {% block body %}
-
-    
+<header>
         <a href="index.html">
             <img src="img/logos/logo_blanc.png" alt="logo">
             <h2>BDE Platform</h2>
@@ -23,18 +13,7 @@
             <h1>Je me connecte</h1>
             <i class="fa-solid fa-arrow-right-to-bracket"></i>
         </div>
-
-          {{ form_label(form.password)}}
-                   {{ form_widget(form.pasword)}}
-
-                   {{ form_widget(form.email)}}
-
-                    {{ form_label(form.email)}}
-
-                    {{ form_end(form)}}
-
-                    {{ form_start(form)}} 
-
+</header>
        <main>
         <section>
         

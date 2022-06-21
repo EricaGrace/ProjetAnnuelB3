@@ -1,13 +1,13 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %} <h1>Administration</h1> {% endblock %}
+{% block pagetitle %} Ajouter une catégorie {% endblock %}
 
 {% block javascripts %} <script src="js/uploadfile.js"></script>  {% endblock %}
  
-{% block body %}
-           
-            <div>
-                <span class="iconify" data-icon="bytesize:settings"></span>
+{% block header %}
+           <div>
+            <h1>Administration</h1>
+            <span class="iconify" data-icon="bytesize:settings"></span> 
                 <ul>
                     <li><a href="ajouterEvenement.html">Ajouter un évènement</a></li>
                     <li><a href="modifierEvenement.html">Modifier un évènement</a></li>
@@ -16,7 +16,8 @@
                     <li><a href="ajouterUtilisateur.html">Ajouter un utilisateur</a></li>
                 </ul>
             </div>    
-
+{% endblock %}
+{% block body %}
     <main>
       <section id="formulaire">
           <div><h2>Ajouter une catégorie</h2></div>
