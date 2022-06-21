@@ -1,5 +1,11 @@
 # Projet Annuel
 
+## ToDo:
+
+- replace all keys (=aliases) from within the container
+- add dot notation to config class using the php dot notation package
+- Route class should use a callable instead of 2 arguments
+
 ## Changelog
 
 - Created a Config class for retrieving configuration values
@@ -58,13 +64,6 @@ récursivement les dépendances si le service est sous forme de FQCN. Il retourn
 quel. On pourrait gérer de la manière dont sont résolu nos services, notamment avec des singletons (ex pour le routeur),
 ou avec une closure. Cela donnerait plus de flexibilité qu'actuellement.
 
-ToDo:
-
-- Require php 8.1 in composer
-- replace all keys (=aliases) from within the container
-- add dot notation to config class using the php dot notation package
-- Route class should use a callable instead of 2 arguments
-
 ````php
 // Instead of this : 
 $router->addRoute(new Route('/test-index', IndexController::class, "indextest"));
@@ -78,3 +77,87 @@ $router->addRoute(new Route('/test-index', function() {
 $router->addRoute(new Route('/test-index', [IndexController::class, "indextest"]));
 
 ````
+
+### Hydratation des données : 
+Pour l'hydratation des données, on a créé un Hydrator implémentant HydratorInterface, qui est automatiquement injecté dans tous les repositories par notre container.
+Il expose une méthode `hydrate(array $values, object $object)` qui, appelée dans un repository, retourne l'objet hydraté.
+
+Pour ce faire, il parcoure le tableau de `$values` et pour chaque valeur, trouve sa propriété et devine son setter.  
+Avant d'appeler ce setter, il regarde si un attribut "Hydrator" existe sur la propriété.
+
+Enfin, si aucun setter n'est trouvé et que l'attribut Hydrator n'est pas défini, l'hydrateur essaiera en dernier recours de setter la propriété avec Réflection.
+
+````php
+class User
+{
+    // ...
+    
+    #[Hydrator(strategy: DateTimeStrategy::class)]
+    private DateTime $birthDate;
+    
+    // ...
+}
+````
+
+L'attribut Hydrator définit une stratégie. Chaque Stratégie est une classe implémentant l'interface `App\Database\Hydration\Strategies\StrategyInterface`.
+Les stratégies exposent donc elles aussi et à coup sûr, une méthode `hydrate()`.
+
+Si l'attribut Hydrator est trouvé, l'hydrateur appellera la méthode `hydrate()` de la stratégie plutôt que le setter qu'il a deviné.
+
+L'implémentation suivante permet par exemple de setter la propriété birthdate de l'entité 'User' en retournant un DateTime.
+````php
+class DateTimeStrategy implements StrategyInterface
+{
+    public function hydrate($value)
+    {
+        try {
+            return new DateTime($value);
+        } catch (Exception $e) {
+            return new DateTime();
+        }
+    }
+````
+---
+### Les stratégies sont automatiquement créés par le container, ce qui nous offre une grande flexibilité :
+
+> **Par exemple:**   
+> Pour instaurer un système de parrainage, on peut ajouter à la table 'user' de la bdd une colonne 'parrain' qui détient une clé étrangère vers l'id d'un autre utilisateur.
+> 
+> On rajoute la propriété à notre Entité:
+> ````php
+> class User
+> {
+>     // ...
+>     
+>     #[Hydrator(strategy: UserStrategy::class)]
+>     private ?User $parrain;
+>     
+>     // ...
+> ````
+> 
+> Et on créé la classe UserStrategy. Comme UserStrategy est instancié par le IoC container, ses dépendances sont automatiquement injectées.  
+> On peut donc type-hinter le `UserRepository`, puis l'utiliser dans notre fonction hydrate pour retourner le parrain de l'utilisateur :
+> 
+> ````php
+> use App\Repository\UserRepository;
+> 
+> class UserStrategy implements StrategyInterface
+> {
+> 
+>     private UserRepository $repository;
+> 
+>     public function __construct(UserRepository $repository)
+>     {
+>         $this->repository = $repository;
+>     }
+> 
+>     public function hydrate($id)
+>     {
+>         return $id ? $this->repository->find($id) : null;
+>     }
+> }
+> ````
+> 
+> Lorsque l'on `dump()` un utilisateur ayant un parrain on obtient : 
+> 
+> ![dump](docs/hydration-user.png)
