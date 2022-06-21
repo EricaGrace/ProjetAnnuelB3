@@ -28,7 +28,7 @@ class UserController extends AbstractController
     public function edit(UserRepository $userRepository, int $id)
     {
         $user = $userRepository->find($id);
-        var_dump($user);
+        dump($user);
     }
 
     #[Route(path: "/user/add", name: "add_user")]
