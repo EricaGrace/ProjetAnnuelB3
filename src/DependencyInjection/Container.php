@@ -2,6 +2,7 @@
 
 namespace App\DependencyInjection;
 
+use App\Database\Hydration\HydratorInterface;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -74,7 +75,7 @@ class Container implements ContainerInterface
         $instance = $reflected->newInstance(...array_merge($parameters, $arguments));
 
         // we bind the freshly made instance to the container
-        $this->overrideKey($service, $instance);
+        $this->overrideKey($id, $instance);
         return $instance;
     }
 
