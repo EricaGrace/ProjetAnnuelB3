@@ -14,9 +14,14 @@ class User implements Entity
     private string $username;
     private string $password;
     private string $email;
+    private ?string $phone;
+    private ?string $role;
 
     #[Hydrator(strategy: DateTimeStrategy::class)]
-    private DateTime $birthDate;
+    private ?DateTime $createdAt;
+
+    #[Hydrator(strategy: DateTimeStrategy::class)]
+    private ?DateTime $birthDate;
 
     #[Hydrator(strategy: UserStrategy::class)]
     private ?User $parrain;
@@ -87,6 +92,41 @@ class User implements Entity
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

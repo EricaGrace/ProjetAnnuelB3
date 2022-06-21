@@ -12,7 +12,7 @@ final class UserRepository extends AbstractRepository
 
     public function save(User $user): bool
     {
-        $stmt = $this->pdo->prepare("INSERT INTO users (`name`, firstName, username, `password`, email, birthDate) VALUES (:name, :firstName, :username, :password, :email, :birthDate)");
+        $stmt = $this->pdo->prepare("INSERT INTO users (`name`, firstName, username, `password`, email, telephone, 'role', createdat, birthdate ) VALUES (:name, :firstName, :username, :password, :email, :telephone, :role, :createdat, :birthDate )");
 
         return $stmt->execute([
             'name' => $user->getName(),
@@ -20,6 +20,9 @@ final class UserRepository extends AbstractRepository
             'username' => $user->getUsername(),
             'password' => password_hash($user->getPassword(), PASSWORD_BCRYPT),
             'email' => $user->getEmail(),
+            'telephone' => $user->getPhone(),
+            'role' => $user->getRole(),
+            'createdat' => $user->getCreatedAt()->format('Y-m-d'),
             'birthDate' => $user->getBirthDate()->format('Y-m-d')
         ]);
     }

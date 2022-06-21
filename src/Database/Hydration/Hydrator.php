@@ -27,6 +27,9 @@ class Hydrator implements HydratorInterface
             $property = $reflected->getProperty($key);
             $guessedSetter = 'set' . ucfirst($property->getName());
 
+            // We skip the value if the retrieved value is empty and the field type allows null
+            if (empty($value) && $property->getType()->allowsNull()) continue;
+
             if (!empty($attributes = $property->getAttributes(HydratorAttribute::class))) {
                 $strategy = $attributes[0]->newInstance()->getStrategy();
                 $value = $this->app->make($strategy)->hydrate($value);
