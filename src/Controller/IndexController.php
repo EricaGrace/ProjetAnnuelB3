@@ -13,7 +13,7 @@ class IndexController extends AbstractController
   #[Route(path: "/", httpMethod: "GET")]
   public function index(Request $request)
   {
-    echo $this->twig->render('index/home.html.twig', [
+    echo $this->twig->render('index/index.html.twig', [
         'request' => $request
     ]);
   }

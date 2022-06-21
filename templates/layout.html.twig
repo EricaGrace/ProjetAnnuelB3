@@ -9,10 +9,10 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         {% block stylesheets %}
         <link href="https://fonts.googleapis.com/css2?family=Neucha&family=Open+Sans&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="asset{{ ('css/normalize.css') }}">
-        <link rel="stylesheet" href="asset{{ ('css/base.css') }}">
-        <link rel="stylesheet" href="asset{{ ('css/all.css') }}">
-        <link rel="stylesheet" href="asset{{ ('css/style.css') }}">
+        <link rel="stylesheet" href="/css/normalize.css">
+        <link rel="stylesheet" href="/css/base.css">
+        <link rel="stylesheet" href="/css/all.css">
+        <link rel="stylesheet" href="/css/style.css">
         {% endblock %}
         {% endblock %}
     </head>
@@ -32,7 +32,7 @@
                 </ul>
         </nav>
 
-        {% block title %}{% endblock %}
+        {% block pagetitle %}{% endblock %}
         
 
         {% block javascripts %}{% endblock %}
