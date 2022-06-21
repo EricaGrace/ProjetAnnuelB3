@@ -9,7 +9,6 @@ class Kernel implements KernelInterface
 
     protected Application $app;
     protected array $bootstrappers = [
-        \App\Bootstrap\LoadConfiguration::class,
         \App\Bootstrap\LoadEnvironmentVariables::class,
         \App\Bootstrap\RegisterServiceProviders::class
     ];
