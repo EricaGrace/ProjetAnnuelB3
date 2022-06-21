@@ -27,7 +27,7 @@ final class UserRepository extends AbstractRepository
         ]);
     }
 
-    public function find(int $id): User
+    public function find(int $id): ?User
     {
         $stmt = $this->pdo->prepare("SELECT * FROM " . static::TABLE . " WHERE id=:id");
 
@@ -35,6 +35,6 @@ final class UserRepository extends AbstractRepository
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetch();
 
-        return $this->hydrate($result);
+        return ($result !== false) ? $this->hydrate($result) : null;
     }
 }

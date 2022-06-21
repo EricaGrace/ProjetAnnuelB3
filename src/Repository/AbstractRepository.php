@@ -27,7 +27,7 @@ abstract class AbstractRepository
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $this->hydrate($result);
+        return ($result !== false) ? $this->hydrate($result) : null;
     }
 
     protected function hydrate($values): Entity
