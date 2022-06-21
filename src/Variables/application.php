@@ -1,6 +1,7 @@
 <?php
 
 use App\ServiceProviders\DBConnectionServiceProvider;
+use App\ServiceProviders\HydrationServiceProvider;
 use App\ServiceProviders\RoutesServiceProvider;
 use App\ServiceProviders\ViewServiceProvider;
 
@@ -9,5 +10,6 @@ return [
         RoutesServiceProvider::class,
         ViewServiceProvider::class,
         DBConnectionServiceProvider::class,
+        HydrationServiceProvider::class,
     ]
 ];
