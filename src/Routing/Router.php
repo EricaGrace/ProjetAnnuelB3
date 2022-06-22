@@ -165,7 +165,7 @@ class Router
         return !empty($route) ? array_values($route)[0] : null;
     }
 
-    public function route(string $name, array $values = []): ?string
+    public function getRouteUriFromName(string $name, array $values = []): ?string
     {
         $route = $this->getRouteByName($name);
 

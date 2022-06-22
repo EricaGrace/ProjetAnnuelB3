@@ -2,8 +2,10 @@
 
 namespace App\ServiceProviders;
 
+use App\Routing\Router;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,10 @@ class ViewServiceProvider extends ServiceProvider
 
     function boot()
     {
-        // TODO: Implement boot() method.
+        $twig = $this->app->make(Environment::class);
+        $router = $this->app->make(Router::class);
+
+        $twig->addGlobal('router', $router);
+        $twig->addFunction(new TwigFunction('route', fn(...$params) => $router->getRouteUriFromName(...$params)));
     }
 }
