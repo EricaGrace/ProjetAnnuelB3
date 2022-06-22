@@ -2,92 +2,155 @@
 
 namespace App\Entity;
 
+use App\Database\Hydration\Strategies\DateTimeStrategy;
+use App\Database\Hydration\Strategies\UserStrategy;
 use DateTime;
 
-class User
+class User implements Entity
 {
-  private int $id;
-  private string $name;
-  private string $firstName;
-  private string $username;
-  private string $password;
-  private string $email;
-  private DateTime $birthDate;
+    private int $id;
+    private string $name;
+    private string $firstName;
+    private string $username;
+    private string $password;
+    private string $email;
+    private ?string $phone;
+    private ?Role $role;
 
-  public function getId(): int
-  {
-    return $this->id;
-  }
+    #[Hydrator(strategy: DateTimeStrategy::class)]
+    private ?DateTime $createdAt;
 
-  public function getName(): string
-  {
-    return $this->name;
-  }
+    #[Hydrator(strategy: DateTimeStrategy::class)]
+    private ?DateTime $birthDate;
 
-  public function setName(string $name): self
-  {
-    $this->name = $name;
+    #[Hydrator(strategy: UserStrategy::class)]
+    private ?User $parrain;
 
-    return $this;
-  }
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
-  public function getFirstName(): string
-  {
-    return $this->firstName;
-  }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
-  public function setFirstName(string $firstName): self
-  {
-    $this->firstName = $firstName;
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
-    return $this;
-  }
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
-  public function getUsername(): string
-  {
-    return $this->username;
-  }
+        return $this;
+    }
 
-  public function setUsername(string $username): self
-  {
-    $this->username = $username;
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
 
-    return $this;
-  }
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
 
-  public function getPassword(): string
-  {
-    return $this->password;
-  }
+        return $this;
+    }
 
-  public function setPassword(string $password): self
-  {
-    $this->password = $password;
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
 
-    return $this;
-  }
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
-  public function getEmail(): string
-  {
-    return $this->email;
-  }
+        return $this;
+    }
 
-  public function setEmail(string $email): self
-  {
-    $this->email = $email;
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
 
-    return $this;
-  }
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
 
-  public function getBirthDate(): DateTime
-  {
-    return $this->birthDate;
-  }
+        return $this;
+    }
 
-  public function setBirthDate(DateTime $birthDate): self
-  {
-    $this->birthDate = $birthDate;
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
 
-    return $this;
-  }
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(Role $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getBirthDate(): DateTime
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(DateTime $birthDate): self
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    public function getParrain(): ?User
+    {
+        return $this->parrain;
+    }
+
+    public function setParrain(?User $parrain): void
+    {
+        $this->parrain = $parrain;
+    }
+
 }

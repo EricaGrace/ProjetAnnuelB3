@@ -1,0 +1,39 @@
+{% extends 'layoutad.html.twig' %}
+
+{% block title %}Je me connecte{% endblock %}
+
+{# Ici vous mettez vos codes HTML et balises Twig au besoin #}
+{% block body %}
+<header>
+        <a href="index.html">
+            <img src="img/logos/logo_blanc.png" alt="logo">
+            <h2>BDE Platform</h2>
+        </a>
+        <div>
+            <h1>Je me connecte</h1>
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </div>
+</header>
+       <main>
+        <section>
+        
+        <form action="" method="post">
+            <ul>
+                <li>
+                   <label for="email">Email</label> <br> 
+                    <input type="email" name="email" id="email">
+                </li>
+                <li>
+                 
+                </li>
+
+                <li>
+                    <button  type="submit"> Je me connecte <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                </li>
+            </ul>
+        </form>
+        
+        </section>
+    </main>
+       
+{% endblock %}

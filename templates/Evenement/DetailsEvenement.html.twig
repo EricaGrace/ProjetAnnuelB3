@@ -1,0 +1,53 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} <h1>Nous te disons tout ce qu'il faut savoir sur cet évènement !</h1> {% endblock %}
+
+{% block body %}
+            <div> 
+                <span class="iconify" data-icon="fontisto:smiley"></span>
+            </div>    
+
+    <main>
+        <section id="infosEvenement">
+            <div>
+                <img src="img/evenements/basket.jpg" alt ="basket">
+                <div>
+                    <div class="bordureRectangle"></div>
+                    <div class="bordureRectangle"></div>
+                    <div class="rectanglePlein" id="rectanglePleinEvenement"></div>
+                </div>
+            </div>
+
+            <div>
+                <ul>
+                    <li><p>Basket</p></li>
+                    <li><p>22/05/2022</p></li>
+                    <li><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget vitae ut et tincidunt non. Morbi aliquet curabitur sed fames laoreet ipsum metus, ornare. Urna amet eget velit.</p></li>
+                    <li><p>12€</p></li>
+                    <li><p>15 places restantes</p></li>
+                </ul>
+               
+                <a href="#" class="btnAvecFond">Je m'inscris <i class="fa-solid fa-pencil"></i></a>
+            </div>
+
+            <div>               
+                <img src="img/icones/icon-park-outline_play-basketball.svg" alt="icone sport">
+                <p>Sport</p>
+            </div>
+
+        </section>
+
+        <section id="adresseEvenement">
+            <div>
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2949.6973997154805!2d4.84169237961069!3d45.748261528061185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ea4133d829c7%3A0xc57067fe1ed804d1!2sL&#39;Appart%20Fitness!5e0!3m2!1sfr!2sfr!4v1646328909565!5m2!1sfr!2sfr" allowfullscreen="" loading="lazy"></iframe>
+            <div>
+                <div class="bordureRectangle"></div>
+                <div class="bordureRectangle"></div>
+                <div class="rectanglePlein"></div>
+            </div>
+        </section>
+    </main>
+
+{% endblock %}

@@ -6,27 +6,46 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use DateTime;
+use Symfony\Component\HttpFoundation\Request;
 
 class IndexController extends AbstractController
 {
-  #[Route(path: "/")]
-  public function index(UserRepository $userRepository)
+  #[Route(path: "/", httpMethod: "GET")]
+  public function index(Request $request)
   {
-    $user = new User();
-
-    $user->setName("Bob")
-      ->setFirstName("John")
-      ->setUsername("Bobby")
-      ->setPassword("randompass")
-      ->setEmail("bob@bob.com")
-      ->setBirthDate(new DateTime('1981-02-16'));
-
-    $userRepository->save($user);
+    echo $this->twig->render('index.html.twig', [
+        'request' => $request
+    ]);
   }
 
-  #[Route(path: "/contact", name: "contact", httpMethod: "POST")]
-  public function contact()
+  #[Route(path: "/contact", httpMethod: "GET", name: "contact")]
+  public function contactForm()
   {
     echo $this->twig->render('index/contact.html.twig');
   }
+
+  #[Route(path: "/contact", httpMethod: "POST", name: "handleContact")]
+  public function handleContactForm(Request $request)
+  {
+    $query = $request->request->all();
+
+    echo '<pre>';
+    var_dump($query);
+    echo '</pre>';
+    echo $this->twig->render('index/contact.html.twig');
+  }
+
+  
+  #[Route(path: "/login", name: "login", httpMethod: "GET")]
+  public function login()
+  {
+    echo $this->twig->render('connexion/login.html.twig');
+  }
+
+  #[Route(path: "/compte", name: "MonCompte", httpMethod: "GET")]
+  public function inscription()
+  {
+    echo $this->twig->render('MonCompte/MonCompte.html.twig');
+  }
 }
+  

@@ -4,31 +4,92 @@ namespace App\DependencyInjection;
 
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
 
 class Container implements ContainerInterface
 {
-  private array $services = [];
+    private array $services = [];
 
-  public function get(string $id)
-  {
-    if (!$this->has($id)) {
-      throw new ServiceNotFoundException($id);
+    public function set(string|array $ids, $service)
+    {
+        foreach ((array)$ids as $id) {
+            if ($this->has($id)) {
+                throw new InvalidArgumentException(sprintf('The "%s" service is already initialized, you cannot replace it.', $id));
+            }
+
+            $this->services[$id] = $service;
+        }
     }
 
-    return $this->services[$id];
-  }
-
-  public function has(string $id)
-  {
-    return array_key_exists($id, $this->services);
-  }
-
-  public function set(string $id, object $service)
-  {
-    if ($this->has($id)) {
-      throw new InvalidArgumentException(sprintf('The "%s" service is already initialized, you cannot replace it.', $id));
+    public function has(string $id)
+    {
+        return array_key_exists($id, $this->services);
     }
 
-    $this->services[$id] = $service;
-  }
+    public function make(mixed $id, mixed ...$arguments): ?object
+    {
+        try {
+            $service = $this->get($id);
+        } catch (ServiceNotFoundException) {
+            // Kernel::class
+            $service = $id;
+        }
+
+        if (is_object($service)) {
+            return $service;
+        }
+
+        try {
+            $reflected = new ReflectionClass($service);
+        } catch (ReflectionException $e) {
+            return null;
+        }
+
+        if (!$reflected->isInstantiable()) {
+            return null;
+        }
+
+        $reflectedConstructor = $reflected->getConstructor();
+        $constructorParameters = $reflectedConstructor ? $reflectedConstructor->getParameters() : [];
+
+        $parameters = [];
+        foreach ($constructorParameters as $parameter) {
+            if ($this->parameterIsNotAClass($parameter)) {
+                continue;
+            }
+
+            $class = $parameter->getType()->getName();
+
+            $param = $this->make($class);
+            $parameters[] = $param;
+        }
+
+        $instance = $reflected->newInstance(...array_merge($parameters, $arguments));
+
+        // we bind the freshly made instance to the container
+        $this->overrideKey($id, $instance);
+        return $instance;
+    }
+
+    public function get(string $id)
+    {
+        if (!$this->has($id)) {
+            throw new ServiceNotFoundException($id);
+        }
+
+        return $this->services[$id];
+    }
+
+    private function parameterIsNotAClass(ReflectionParameter $parameter): bool
+    {
+        return (!$parameter->getType() || $parameter->getType()->isBuiltin());
+    }
+
+    private function overrideKey(mixed $id, object $service): void
+    {
+        $this->services[$id] = $service;
+    }
+
 }
