@@ -44,7 +44,11 @@ class Kernel implements KernelInterface
         $method = $request->server->get('REQUEST_METHOD');
 
         try {
-            return $response->setContent($router->execute($uri, $method));
+            $content = $router->execute($uri, $method);
+
+            // if the router returns a Response object, we return it to be sent.
+            // OTHERWISE, it must be a string, so we set the content of our response.
+            return ($content instanceof Response) ? $content : $response->setContent($content);
         } catch (RouteNotFoundException $e) {
             $response->setStatusCode(404);
             return $response->setContent(
