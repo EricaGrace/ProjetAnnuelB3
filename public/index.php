@@ -20,8 +20,9 @@ $kernel = $app->bindKernel();
 
 $app->bootstrap($kernel->getBootstrapers());
 
-//TODO: bind request to container
 $request = Request::createFromGlobals();
+$app->set([Request::class, 'request'], $request);
+
 $requestUri = $request->server->get('REQUEST_URI');
 $requestMethod = $request->server->get('REQUEST_METHOD');
 
