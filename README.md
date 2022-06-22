@@ -161,3 +161,42 @@ class DateTimeStrategy implements StrategyInterface
 > Lorsque l'on `dump()` un utilisateur ayant un parrain on obtient : 
 > 
 > ![dump](docs/hydration-user.png)
+
+
+## Kernel, Response & PSR-7
+
+Jusqu'à présent, notre application ne disposait que d'un objet Request que l'on pouvait manipuler pour récupérer les informations de la requête entrante. 
+La requête était passée à notre routeur qui se chargeait d'appeler le controlleur associé, celui-ci appliquait sa logique, puis faisait un `echo` d'une template twig par exemple.
+Ce echo envoie automatiquement les headers et le contenu de la page. 
+
+On a décidé de remplacer ce fonctionnement par un objet `Symfony\Component\HttpFoundation\Response` qui détient le content, les headers, et le response code. 
+> /!\ Response de Symfony n'est pas compatible avec PSR-7. Il peut l'être à l'aide de [PSR-7 bridge](https://symfony.com/doc/current/components/psr7.html)
+
+Le nouveau fonctionnement est le suivant: 
+1. La requête est créée puis passée au Kernel
+2. Le Kernel crée un objet Response
+3. Il appelle le routeur qui peut retourner soit une string, soit un objet Response
+4. Le kernel renvoie un objet Response qui est envoyée avec la méthode `send()`
+
+-> Les méthodes du routeur peuvent désormais `return` une template twig, ou une Response. 
+
+Par exemple:
+````php
+// IndexController.php
+
+// exemple avec une template twig
+#[Route(path: "/", httpMethod: "GET")]
+public function index(Request $request)
+{
+  return $this->twig->render('index.html.twig', [
+      'request' => $request
+  ]);
+}
+  
+// exemple avec un RedirectResponse
+#[Route(path: "/", httpMethod: "GET")]
+public function index()
+{
+    return new RedirectResponse('/contact');
+}
+````
