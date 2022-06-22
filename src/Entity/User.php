@@ -15,7 +15,7 @@ class User implements Entity
     private string $password;
     private string $email;
     private ?string $phone;
-    private ?string $role;
+    private ?Role $role;
 
     #[Hydrator(strategy: DateTimeStrategy::class)]
     private ?DateTime $createdAt;
@@ -107,12 +107,12 @@ class User implements Entity
 
         return $this;
     }
-    public function getRole(): string
+    public function getRole(): Role
     {
         return $this->role;
     }
 
-    public function setRole(string $role): self
+    public function setRole(Role $role): self
     {
         $this->role = $role;
 
@@ -141,6 +141,16 @@ class User implements Entity
         $this->birthDate = $birthDate;
 
         return $this;
+    }
+
+    public function getParrain(): ?User
+    {
+        return $this->parrain;
+    }
+
+    public function setParrain(?User $parrain): void
+    {
+        $this->parrain = $parrain;
     }
 
 }
