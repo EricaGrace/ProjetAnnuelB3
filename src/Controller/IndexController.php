@@ -13,7 +13,7 @@ class IndexController extends AbstractController
   #[Route(path: "/", httpMethod: "GET")]
   public function index(Request $request)
   {
-    echo $this->twig->render('index.html.twig', [
+    return $this->twig->render('index.html.twig', [
         'request' => $request
     ]);
   }
@@ -21,7 +21,7 @@ class IndexController extends AbstractController
   #[Route(path: "/contact", httpMethod: "GET", name: "contact")]
   public function contactForm()
   {
-    echo $this->twig->render('index/contact.html.twig');
+    return $this->twig->render('index/contact.html.twig');
   }
 
   #[Route(path: "/contact", httpMethod: "POST", name: "handleContact")]
@@ -29,23 +29,20 @@ class IndexController extends AbstractController
   {
     $query = $request->request->all();
 
-    echo '<pre>';
-    var_dump($query);
-    echo '</pre>';
-    echo $this->twig->render('index/contact.html.twig');
+    return $this->twig->render('index/contact.html.twig');
   }
 
   
-  #[Route(path: "/inscription", name: "login", httpMethod: "GET")]
+  #[Route(path: "/login", name: "login", httpMethod: "GET")]
   public function login()
   {
-    echo $this->twig->render('User/inscription.html.twig');
+    return $this->twig->render('connexion/login.html.twig');
   }
 
   #[Route(path: "/compte", name: "MonCompte", httpMethod: "GET")]
   public function inscription()
   {
-    echo $this->twig->render('MonCompte/MonCompte.html.twig');
+    return $this->twig->render('MonCompte/MonCompte.html.twig');
   }
 }
   
