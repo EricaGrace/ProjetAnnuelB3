@@ -23,12 +23,5 @@ $app->bootstrap($kernel->getBootstrapers());
 $request = Request::createFromGlobals();
 $app->set([Request::class, 'request'], $request);
 
-$requestUri = $request->server->get('REQUEST_URI');
-$requestMethod = $request->server->get('REQUEST_METHOD');
-
-try {
-    $app->make(Router::class)->execute($requestUri, $requestMethod);
-} catch (RouteNotFoundException $e) {
-    http_response_code(404);
-    echo $app->make(Environment::class)->render('404.html.twig', ['title' => $e->getMessage()]);
-}
+$response = $kernel->handle($request);
+$response->send();

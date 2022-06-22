@@ -50,7 +50,7 @@ class Router
         $servicesParams = $this->getMethodServiceParams($controllerName, $method);
         $getParams = $route->getGetParams();
 
-        call_user_func_array(
+        return call_user_func_array(
             [$controller, $method],
             array_merge($servicesParams, $getParams)
         );
