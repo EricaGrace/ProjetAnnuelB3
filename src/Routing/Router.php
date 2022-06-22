@@ -13,7 +13,7 @@ class Router
     private const CONTROLLERS_NAMESPACE = "App\\Controller\\";
     private const CONTROLLERS_DIR = __DIR__ . "/../Controller";
     /** @var Route[] */
-    private $routes = [];
+    private array $routes = [];
     private ContainerInterface $container;
     private ArgumentResolver $argumentResolver;
 
@@ -156,5 +156,20 @@ class Router
         $this->routes[] = $route;
 
         return $this;
+    }
+
+    public function getRouteByName(string $name): ?Route
+    {
+        $route = array_filter($this->routes, fn(Route $route) => $route->getName() === $name);
+
+        return !empty($route) ? array_values($route)[0] : null;
+    }
+
+    public function route(string $name, array $values = []): ?string
+    {
+        $route = $this->getRouteByName($name);
+
+        return !$route ? null : $this->argumentResolver->setGetParams($route, $values);
+
     }
 }
