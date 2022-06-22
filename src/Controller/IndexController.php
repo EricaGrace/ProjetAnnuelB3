@@ -36,10 +36,10 @@ class IndexController extends AbstractController
   }
 
   
-  #[Route(path: "/login", name: "login", httpMethod: "GET")]
+  #[Route(path: "/inscription", name: "login", httpMethod: "GET")]
   public function login()
   {
-    echo $this->twig->render('connexion/login.html.twig');
+    echo $this->twig->render('User/inscription.html.twig');
   }
 
   #[Route(path: "/compte", name: "MonCompte", httpMethod: "GET")]
