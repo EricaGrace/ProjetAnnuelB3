@@ -2,6 +2,7 @@
 
 namespace App\ServiceProviders;
 
+use App\Controller\GlobalController;
 use App\Routing\Router;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -32,5 +33,9 @@ class ViewServiceProvider extends ServiceProvider
         $twig->addGlobal('router', $router);
         $twig->addFunction(new TwigFunction('route', fn(...$params) => $router->getRouteUriFromName(...$params)));
         $twig->addFunction(new TwigFunction('dump', 'dump'));
+
+        $method = $this->app->callClassMethod(GlobalController::class, 'getGlobalData');
+        $twig->addGlobal('global', $method);
+
     }
 }
