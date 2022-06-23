@@ -3,9 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Repository\Traits\EntityHasSlug;
 
 class EventRepository extends AbstractRepository
 {
-    protected const TABLE = 'events';
+    use EntityHasSlug;
+
+    public const TABLE = 'events';
     protected const ENTITY = Event::class;
 }
