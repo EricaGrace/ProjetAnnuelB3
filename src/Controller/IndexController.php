@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class IndexController extends AbstractController
 {
-    #[Route(path: "/", httpMethod: "GET")]
+    #[Route(path: "/", httpMethod: "GET", name: 'home')]
     public function index(Request $request, EventRepository $eventRepository)
     {
         return $this->twig->render('index.html.twig', [

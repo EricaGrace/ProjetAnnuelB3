@@ -76,15 +76,7 @@
             </div>
             <div>
                 {% for event in events %}
-                    <a href="detailsEvenement.html">
-                        <div class="rectanglePleinEvenement"></div>
-                        <img src="{{ event.image }}" alt="{{ event.title }}">
-                        <div class="bordureRectangleEvenement">
-                            <p>{{ event.title }}</p>
-                            <p>{{ event.category.name }}</p>
-                            <p>{{ event.date|date('d/m/Y') }} à {{ event.date|date('H:m') }}</p>
-                        </div>
-                    </a>
+                    {% include 'partials/event-card.html.twig' with {event} %}
                 {% endfor %}
             </div>
 

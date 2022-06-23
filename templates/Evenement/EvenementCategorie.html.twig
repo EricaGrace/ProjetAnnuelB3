@@ -10,15 +10,7 @@
             <div>
                 {% if events %}
                     {% for event in events %}
-                        <a href="{{ route('event', {slug: event.getSlug}) }}">
-                            <div class="rectanglePleinEvenement"></div>
-                            <img src="{{ event.image }}" alt="{{ event.title }}">
-                            <div class="bordureRectangleEvenement">
-                                <p>{{ event.title }}</p>
-                                <p>{{ event.category.name }}</p>
-                                <p>{{ event.date|date('d/m/Y') }} à {{ event.date|date('H:m') }}</p>
-                            </div>
-                        </a>
+                        {% include 'partials/event-card.html.twig' with {event} %}
                     {% endfor %}
                 {% else %}
                     <h2>Oh non! Pas d'évènements pour la catégorie {{ category.name|lower }}</h2>
