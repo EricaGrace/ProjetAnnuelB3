@@ -31,8 +31,8 @@
                     <li><a href="evenementsCategorie.html">Intégration</a></li>
                     <li><a href="evenementsCategorie.html">Soirée</a></li>
                     <li><a href="evenementsCategorie.html">Sport</a></li>
-                    <li><a href="Connexion/login.html.twig" class="btnSansFond">Je me connecte <i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
-                    <li><a href="inscription/inscription.html.twig" class="btnAvecFond">Je m'inscris <i class="fa-solid fa-pencil"></i></a></li>
+                    <li><a href="{{ route('login') }}" class="btnSansFond">Je me connecte <i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
+                    <li><a href="{{ route('signup') }}" class="btnAvecFond">Je m'inscris <i class="fa-solid fa-pencil"></i></a></li>
                 </ul>
         </nav>
         {% block header %} {% endblock %} 
