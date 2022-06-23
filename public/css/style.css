@@ -186,6 +186,7 @@ p{
     z-index : 20;
     padding-top: 55px;
     padding-bottom: 55px;
+    margin-top: 0;
   }
 
   .open .menu{
@@ -194,6 +195,10 @@ p{
 
   .menu li a {
     font-size: 2rem;
+  }
+
+  #menu-admin li{
+     padding-bottom: 20px;
   }
 }
 /******************************

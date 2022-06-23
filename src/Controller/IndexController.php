@@ -43,5 +43,11 @@ class IndexController extends AbstractController
     {
         return $this->twig->render('User/MonCompte.html.twig');
     }
+
+    #[Route(path: "/add", httpMethod: "GET", name: "evenement")]
+    public function add()
+    {
+        return $this->twig->render('Administration/AjouterEvenement.html.twig');
+    }
 }
   
