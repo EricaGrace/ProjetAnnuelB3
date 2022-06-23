@@ -25,17 +25,13 @@ class ViewServiceProvider extends ServiceProvider
         ]));
     }
 
-    function boot()
+    function boot(Environment $twig, Router $router)
     {
-        $twig = $this->app->make(Environment::class);
-        $router = $this->app->make(Router::class);
-
         $twig->addGlobal('router', $router);
         $twig->addFunction(new TwigFunction('route', fn(...$params) => $router->getRouteUriFromName(...$params)));
         $twig->addFunction(new TwigFunction('dump', 'dump'));
 
         $method = $this->app->callClassMethod(GlobalController::class, 'getGlobalData');
         $twig->addGlobal('global', $method);
-
     }
 }

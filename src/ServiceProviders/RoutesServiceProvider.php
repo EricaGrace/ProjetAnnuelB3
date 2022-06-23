@@ -13,9 +13,8 @@ class RoutesServiceProvider extends ServiceProvider
         $this->app->singleton(Router::class, Router::class);
     }
 
-    function boot()
+    function boot(Router $router)
     {
-        $router = $this->app->make(Router::class);
         $router->registerRoutes();
     }
 }
