@@ -12,7 +12,7 @@ body {
 
 .btnAvecFond, button, .labelFichier{
   background: #3B115D;
-  color:white;
+  color:white !important;
   padding:11px;
   border-radius: 8px;
 }
@@ -29,7 +29,7 @@ body {
 }
 
 .btnSansFond{
-  color:#3B115D;
+  color:#3B115D !important;
 }
 
 .btnSansFond:hover{
