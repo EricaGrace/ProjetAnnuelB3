@@ -30,6 +30,25 @@ abstract class AbstractRepository
         return ($result !== false) ? $this->hydrate($result) : null;
     }
 
+    public function findAll(?int $limit = null)
+    {
+        $maxRows = $limit ? " LIMIT :limit" : null;
+        $query = "SELECT * FROM " . static::TABLE . $maxRows;
+
+        $stmt = $this->pdo->prepare($query);
+
+        if ($limit) {
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return array_map(function($values) {
+            return $this->hydrate($values);
+        }, $result);
+    }
+
     protected function hydrate($values): Entity
     {
         $entity = static::ENTITY;
