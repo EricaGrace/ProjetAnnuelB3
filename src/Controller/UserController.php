@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use App\Session\SessionInterface;
-use DateTime;
 
 class UserController extends AbstractController
 {
@@ -15,7 +13,7 @@ class UserController extends AbstractController
     {
         $users = [];
 
-        echo $this->twig->render(
+        echo $this->render(
             'user/list.html.twig',
             [
                 'users' => $users,
@@ -29,22 +27,5 @@ class UserController extends AbstractController
     {
         $user = $userRepository->findByUsername($username);
         dump($user);
-    }
-
-    #[Route(path: "/user/add", name: "add_user")]
-    public function addUser(UserRepository $userRepository)
-    {
-        $user = new User();
-
-        $user->setName("Bob")
-            ->setFirstName("John")
-            ->setUsername("Bobby")
-            ->setPassword("randompass")
-            ->setEmail("bob@bob.com")
-            ->setBirthDate(new DateTime('now'));
-
-        $userRepository->save($user);
-
-        echo "User saved";
     }
 }

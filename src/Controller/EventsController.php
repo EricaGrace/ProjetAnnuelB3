@@ -13,17 +13,18 @@ class EventsController extends AbstractController
     public function categoryPage(EventCategoryRepository $eventCategoryRepository, string $slug)
     {
         $category = $eventCategoryRepository->findBySlug($slug);
+        $events = $eventCategoryRepository->findEventsFromCategory($category->getId());
 
-        return $this->twig->render('Evenement/EvenementCategorie.html.twig', [
+        return $this->renderIf('Evenement/EvenementCategorie.html.twig', [
             'category' => $category,
-            'events' => $eventCategoryRepository->findEventsFromCategory($category->getId())
-        ]);
+            'events' => $events
+        ], $category, $events);
     }
 
     #[Route(path: '/event/{slug}', httpMethod: 'GET', name: 'event')]
     public function show(EventRepository $repository, string $slug)
     {
-        return $this->twig->render('Evenement/DetailsEvenement.html.twig', [
+        return $this->render('Evenement/DetailsEvenement.html.twig', [
             'event' => $repository->findBySlug($slug)
         ]);
     }
