@@ -171,6 +171,10 @@ class DateTimeStrategy implements StrategyInterface
 >
 > ![dump](docs/hydration-user.png)
 
+À noter que cette façon d'hydrater fonctionne bien, mais "provoque" le problème n+1
+Si l'on récupère 10 Users, on effectuera la requette principale avec le `findAll()` de l'AbstractRepository, + 10 autres requêtes pour récupérer les parrains. Soit n+1 requêtes.
+Sur 10 users, cela reste négligeable, mais l'entité Event possède des références vers EventCategory, User, et Venue...
+
 ## Kernel, Response & PSR-7
 
 Jusqu'à présent, notre application ne disposait que d'un objet Request que l'on pouvait manipuler pour récupérer les
