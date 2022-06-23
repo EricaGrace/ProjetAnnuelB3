@@ -2,16 +2,18 @@
 
 namespace App\Controller;
 
+use App\Repository\EventRepository;
 use App\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 class IndexController extends AbstractController
 {
     #[Route(path: "/", httpMethod: "GET")]
-    public function index(Request $request)
+    public function index(Request $request, EventRepository $eventRepository)
     {
         return $this->twig->render('index.html.twig', [
-            'request' => $request
+            'request' => $request,
+            'events' => $eventRepository->findAll()
         ]);
     }
 
