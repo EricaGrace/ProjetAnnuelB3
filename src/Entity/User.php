@@ -6,6 +6,7 @@ use App\Database\Hydration\Strategies\DateTimeStrategy;
 use App\Database\Hydration\Strategies\RoleStrategy;
 use App\Database\Hydration\Strategies\UserStrategy;
 use DateTime;
+use Respect\Validation\Rules\Date;
 
 class User implements Entity
 {
