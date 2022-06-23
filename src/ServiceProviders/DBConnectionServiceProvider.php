@@ -14,7 +14,7 @@ class DBConnectionServiceProvider extends ServiceProvider
         $pdoConnection = new PdoConnection();
         $pdoConnection->init();
 
-        $this->app->set(PDO::class, $pdoConnection->getPdoConnection());
+        $this->app->singleton(PDO::class, $pdoConnection->getPdoConnection());
     }
 
     function boot()
