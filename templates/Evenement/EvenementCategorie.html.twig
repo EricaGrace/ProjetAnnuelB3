@@ -4,91 +4,25 @@
 
 {% block body %}
     <main>
-        
-        <section id="evenements">
-       
-            <div>             
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/bieres.jpg" alt ="afterwork">
-                    <div class="bordureRectangleEvenement">
-                        <p>Afterwork</p>
-                        <p>12/04/2022</p>
-                    </div>
-                </a>
-                    
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/soiree.jpg" alt ="soiree">
-                    <div class="bordureRectangleEvenement">
-                        <p>Soirée</p>
-                        <p>8/05/2022</p>
-                    </div>
-                </a>
 
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/basket.jpg" alt ="basket">
-                    <div class="bordureRectangleEvenement">
-                        <p>Basket</p>
-                        <p>22/05/2022</p>
-                    </div>
-                </a>
-         
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/course_a_pied.jpg" alt ="course a pied">
-                    <div class="bordureRectangleEvenement">
-                        <p>Course à pied</p>
-                        <p>3/07/2022</p>
-                    </div>
-                </a>
-               
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/concert.jpg" alt ="concert">
-                    <div class="bordureRectangleEvenement">
-                        <p>Concert</p>
-                        <p>5/07/2022</p>
-                    </div>
-                </a>
-   
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/festival.jpg" alt ="festival">
-                    <div class="bordureRectangleEvenement">
-                        <p>Festival</p>
-                        <p>5/08/2022</p>
-                    </div>
-                </a>
-      
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/restaurant.jpg" alt ="afterwork">
-                    <div class="bordureRectangleEvenement">
-                        <p>Afterwork</p>
-                        <p>1/09/2022</p>
-                    </div>
-                </a>
-              
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/yoga.jpg" alt ="yoga">
-                    <div class="bordureRectangleEvenement">
-                        <p>Yoga</p>
-                        <p>15/09/2022</p>
-                    </div>
-                </a>
-             
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/afterwork.jpg" alt ="afterwork">
-                    <div class="bordureRectangleEvenement">
-                        <p>Afterwork</p>
-                        <p>26/09/2022</p>
-                    </div>
-                </a>
-         
+        <section id="evenements">
+
+            <div>
+                {% if events %}
+                    {% for event in events %}
+                        <a href="detailsEvenement.html">
+                            <div class="rectanglePleinEvenement"></div>
+                            <img src="{{ event.image }}" alt="{{ event.title }}">
+                            <div class="bordureRectangleEvenement">
+                                <p>{{ event.title }}</p>
+                                <p>{{ event.category.name }}</p>
+                                <p>{{ event.date|date('d/m/Y') }} à {{ event.date|date('H:m') }}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <h2>Oh non! Pas d'évènements pour la catégorie {{ category.name|lower }}</h2>
+                {% endif %}
             </div>
 
             <p>
@@ -98,6 +32,6 @@
                 <a href="#">4</a>
             </p>
 
-        </section> 
+        </section>
     </main>
 {% endblock %}
