@@ -2,7 +2,6 @@
 
 ## ToDo:
 
-- replace all keys (=aliases) from within the container
 - add dot notation to config class using the php dot notation package
 - Route class should use a callable instead of 2 arguments
 
@@ -57,12 +56,6 @@ Service providers : classes USED by our app Bootstrappers : service providers RE
 
 Séparer les service providers des bootstrappers permet de pouvoir réutiliser la code 'project-agnostic' sur un autre
 projet à la manière d'un framework.
-
-Pour améliorer le container:
-Actuellement, le container stocke "en vrac" les services. Il instancie les classes en résolvant automatiquement et
-récursivement les dépendances si le service est sous forme de FQCN. Il retourne simplement l'objet si il est stocké tel
-quel. On pourrait gérer de la manière dont sont résolu nos services, notamment avec des singletons (ex pour le routeur),
-ou avec une closure. Cela donnerait plus de flexibilité qu'actuellement.
 
 ````php
 // Instead of this : 
@@ -252,4 +245,44 @@ controller associé et appellait la méthode en lui injectant ses dépendances.
 On a alors extrait cette responsabilité en la donnant au Container via une méthode `callClassMethod`. Cela aura permis
 de réduire de 11 lignes la méthode `execute()` du routeur, et de supprimer totalement la
 méthode `getMethodServiceParams()`. Cela permet en plus de pouvoir réutiliser `callClassMethod()` depuis n'importe où
-dans notre application, en restant DRY (= sans répéter la logique d'injection de dépendances). 
+dans notre application, en restant DRY (= sans répéter la logique d'injection de dépendances).
+
+### Amélioration du container: singletons
+
+Nous avions déjà fait évoluer notre container d'un simple bac dans lequel on met des objets en vrac en un container qui
+sait résolver des dépendances et les injecter automatiquement. Aussi bien et fonctionnel que cela puisse paraître, la
+façon dont il résolvait les objets posait un sérieux problème. Lorsque le container résolvait une dépendance, il
+l'auto-enregistrait dans sa liste de services pour ressortir l'OBJET la prochaine fois que l'on lui demanderait.
+Autrement dit: le container ne savait faire que des singletons.
+
+On a donc créé la méthode `singleton()` qui n'est qu'un alias pour la méthode `set()` à laquelle on a rajouté le
+paramètre facultatif `bool $singleton = false`.
+
+Si l'on passe `true` à ce paramètre, `set()` enregistrera le service dans un tableau supplémentaire $singleton.
+
+Ce sera ensuite lors de la résolution avec `make()` que le container décidera s'il doit enregistrer l'objet instancié
+dans ses services ou non.
+
+On peut désormais `register()` les services providers avec la méthode `singleton()`. Par exemple, le routeur qui a
+besoin de rester le même à chaque fois puisqu'il détient les routes et qu'on ne souhaite pas rappeler la fonction
+registerRoutes() à chaque fois que l'on résolve le routeur.
+
+````php
+class RoutesServiceProvider extends ServiceProvider
+{
+
+    function register(): void
+    {
+        $this->app->singleton(Router::class, Router::class);
+    }
+
+    function boot()
+    {
+        $router = $this->app->make(Router::class);
+        $router->registerRoutes();
+    }
+}
+````
+
+Dorénavant, appeler `set()` aura comme comportement par défaut de ne PAS faire de singleton, et les objets seront
+instanciés à chaque fois qu'il seront résolvés.
