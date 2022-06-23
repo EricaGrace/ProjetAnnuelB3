@@ -10,7 +10,7 @@
             <div>
                 {% if events %}
                     {% for event in events %}
-                        <a href="detailsEvenement.html">
+                        <a href="{{ route('event', {slug: event.getSlug}) }}">
                             <div class="rectanglePleinEvenement"></div>
                             <img src="{{ event.image }}" alt="{{ event.title }}">
                             <div class="bordureRectangleEvenement">
