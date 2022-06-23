@@ -6,6 +6,7 @@ class EventCategory implements Entity
 {
     private int $id;
     private string $name;
+    private string $slug;
 
     public function getId(): string
     {
@@ -29,5 +30,15 @@ class EventCategory implements Entity
         return $this;
     }
 
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): EventCategory
+    {
+        $this->slug = $slug;
+        return $this;
+    }
 
 }
