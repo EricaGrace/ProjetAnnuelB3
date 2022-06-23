@@ -286,3 +286,26 @@ class RoutesServiceProvider extends ServiceProvider
 
 Dorénavant, appeler `set()` aura comme comportement par défaut de ne PAS faire de singleton, et les objets seront
 instanciés à chaque fois qu'il seront résolvés.
+
+### DI des méthodes boot des Service Providers
+
+Avoir la méthode callClassMethod() dans le container et non plus dans le routeur nous permet également de faire de
+l'injection dans les méthodes boot de nos provides. Alors qu'avant il fallait faire :
+
+````php
+function boot()
+{
+    $router = $this->app->make(Router::class);
+    $router->registerRoutes();
+}
+````
+
+On peut maintenant type-hinter nos dépendances dans la méthode boot() plutôt que dans le constructeur, à la manière d'un
+controlleur :
+
+````php
+function boot(Router $router)
+{
+    $router->registerRoutes();
+}
+````
