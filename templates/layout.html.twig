@@ -22,7 +22,11 @@
                     <img src="img/logos/logo_colore.png" alt="logo">
                     <p><span>BDE</span> Platform</p>
                 </a>
-                <ul>
+                <div class="toggle"> 
+                    <i class="fa-solid fa-bars ouvrir"></i>
+                    <i class="fa-solid fa-xmark fermer"></i>
+                </div>
+                <ul class="menu">
                     <li><a href="evenementsCategorie.html">Afterwork</a></li>
                     <li><a href="evenementsCategorie.html">Intégration</a></li>
                     <li><a href="evenementsCategorie.html">Soirée</a></li>
@@ -36,7 +40,7 @@
         {% block pagetitle %}{% endblock %}
         
 
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}<script src="js/main.js"></script>{% endblock %}
         
         {% block body %}{% endblock %}
 

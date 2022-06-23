@@ -134,6 +134,68 @@ main section:nth-child(odd) h2:after{
 p{
   font-size:17px;
 }
+
+.toggle{
+  display: none;
+}
+
+@media all and (max-width: 991px){
+  nav ul li, header div ul {
+    display: block !important;
+    justify-content: space-around;
+    padding-bottom: 25px;
+}
+  header{
+    background: transparent;
+  }
+  .toggle{
+    display: block;
+    font-size: 2rem;
+    cursor : pointer;
+    position: relative;
+    z-index: 40;
+  }
+  
+  .ouvrir{
+    display: block;
+  }
+
+  .fermer{
+    display: none;
+  }
+
+  .open .ouvrir{
+    display: none;
+  }
+
+  .open .fermer{
+    display: block;
+  }
+
+  .menu{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    flex-direction: column;
+    padding: 2rem;
+    align-items: center;
+    transform: translateX(-100%);
+    transition: transform 1s;
+    z-index : 20;
+    padding-top: 55px;
+    padding-bottom: 55px;
+  }
+
+  .open .menu{
+    transform: translateX(0);
+  }
+
+  .menu li a {
+    font-size: 2rem;
+  }
+}
 /******************************
         CLASSES GLOBALES
 ******************************/
