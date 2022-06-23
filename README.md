@@ -309,3 +309,71 @@ function boot(Router $router)
     $router->registerRoutes();
 }
 ````
+
+### Rendu des templates : `return404()`, `render()` et `renderIf()`
+
+Que se passe-t-il si dans un controller, un repository ne renvoie aucun résultat? Par exemple, si un slug n'est pas
+trouvé ?
+
+````php
+$category = $categoryRepository->findBySlug($slug) // returns null
+````
+
+On ne voudrait pas que le repository lance une exception, ce n'est ni logique, ni son rôle. On pourrait faire par
+exemple :
+
+````php
+// EventsController.php
+
+$category = $categoryRepository->findBySlug($slug); // returns null
+
+if ($category) {
+    return $this->twig->render('Evenement/EvenementCategorie.html.twig', [
+        'category' => $category
+    ]);
+}
+return $this->twig->render('404.html.twig');
+````
+
+Mais la syntaxe est extrêmement verbeuse et répéter cette logique dans chaque méthode serait une énorme perte de temps,
+en plus de ne pas être DRY. Et c'est sans compter les conséquences qu'auraient le changement de moteur de templating.
+
+Au lieu de ça, on a choisi de créer dans le AbstractController, trois méthodes.
+
+- `return404()`
+- `render()`
+- `renderIf()`
+
+`return404()` lance une `RouteNotFoundException` lorsqu'elle est invoquée. Celle-ci est catchée par le Kernel qui
+décidera de rendre le template de la page 404.
+
+`render()` est un wrapper autour de `twig->render()`. Il facilite le changement de dépendances:  si l'on souhaite
+utiliser un autre moteur de templating, on peut facilement adapter la méthode. De plus, les controlleurs appelleront
+dorénavant:
+
+````php
+$this->render();
+````
+
+et non plus :
+
+````php
+$this->twig->render();
+````
+
+Ce qui enlève les références à twig. C'est plus rapide à écrire, et en cas de remplacement de twig, il n'y aura
+absolument rien à changer.
+
+Enfin, `renderIf()` permet de conditionner le rendu. Si les conditions passent, alors elle appellera `render()`. Sinon,
+elle appellera `return404()` au premier échec.
+
+Toutes ces méthodes nous permettent de remplacer le code de plus haut, par un code plus efficace, lisible et versatile :
+
+````php
+// EventsController.php
+$category = $categoryRepository->findBySlug($slug); // returns null
+
+return $this->renderIf('Evenement/EvenementCategorie.html.twig', [
+    'category' => $category
+], $category); // On peut ajouter autant de conditions que voulu
+````
