@@ -10,7 +10,7 @@ class RoutesServiceProvider extends ServiceProvider
 
     function register(): void
     {
-        $this->app->set(Router::class, Router::class);
+        $this->app->singleton(Router::class, Router::class);
     }
 
     function boot()
