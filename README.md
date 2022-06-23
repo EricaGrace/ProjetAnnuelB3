@@ -171,9 +171,10 @@ class DateTimeStrategy implements StrategyInterface
 >
 > ![dump](docs/hydration-user.png)
 
-À noter que cette façon d'hydrater fonctionne bien, mais "provoque" le problème n+1
-Si l'on récupère 10 Users, on effectuera la requette principale avec le `findAll()` de l'AbstractRepository, + 10 autres requêtes pour récupérer les parrains. Soit n+1 requêtes.
-Sur 10 users, cela reste négligeable, mais l'entité Event possède des références vers EventCategory, User, et Venue...
+À noter que cette façon d'hydrater fonctionne bien, mais "provoque" le problème n+1 Si l'on récupère 10 Users, on
+effectuera la requette principale avec le `findAll()` de l'AbstractRepository, + 10 autres requêtes pour récupérer les
+parrains. Soit n+1 requêtes. Sur 10 users, cela reste négligeable, mais l'entité Event possède des références vers
+EventCategory, User, et Venue...
 
 ## Kernel, Response & PSR-7
 
@@ -242,3 +243,13 @@ $router->route('user_edit', ['id' => 12]) // donnera '/user/edit/1'
 // dans le contexte twig:
 {{ route('user_edit', {'id': 12}) }} // donnera '/user/edit/1'
 ````
+
+### Principe de responsabilité unique : refactoring du routeur
+
+Jusqu'à présent, notre routeur ne respectait pas le principe de responsabilité unique. En effet, instanciait le
+controller associé et appellait la méthode en lui injectant ses dépendances.
+
+On a alors extrait cette responsabilité en la donnant au Container via une méthode `callClassMethod`. Cela aura permis
+de réduire de 11 lignes la méthode `execute()` du routeur, et de supprimer totalement la
+méthode `getMethodServiceParams()`. Cela permet en plus de pouvoir réutiliser `callClassMethod()` depuis n'importe où
+dans notre application, en restant DRY (= sans répéter la logique d'injection de dépendances). 

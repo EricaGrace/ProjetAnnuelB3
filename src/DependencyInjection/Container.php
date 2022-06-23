@@ -28,12 +28,48 @@ class Container implements ContainerInterface
         return array_key_exists($id, $this->services);
     }
 
+    public function callClassMethod(string $FQCN, string $method, mixed ...$values)
+    {
+        $method = (new ReflectionClass($FQCN))->getMethod($method);
+        $methodParameters = $method->getParameters();
+        $method = $method->name;
+
+        $arguments = $this->instanciateInstanciableParameters($methodParameters);
+
+        return $this->make($FQCN)->$method(...array_merge($arguments, $values));
+    }
+
+    /**
+     * @param ReflectionParameter[] $methodParameters
+     * @return array
+     */
+    private function instanciateInstanciableParameters(array $methodParameters)
+    {
+        $arguments = [];
+        foreach ($methodParameters as $parameter) {
+            if ($this->parameterIsAClass($parameter)) {
+                $arguments[] = $this->make($parameter->getType()->getName());
+            }
+        }
+
+        return $arguments;
+    }
+
+    private function parameterIsAClass(ReflectionParameter $parameter): bool
+    {
+        return !$this->parameterIsNotAClass($parameter);
+    }
+
+    private function parameterIsNotAClass(ReflectionParameter $parameter): bool
+    {
+        return (!$parameter->getType() || $parameter->getType()->isBuiltin());
+    }
+
     public function make(mixed $id, mixed ...$arguments): ?object
     {
         try {
             $service = $this->get($id);
         } catch (ServiceNotFoundException) {
-            // Kernel::class
             $service = $id;
         }
 
@@ -43,7 +79,7 @@ class Container implements ContainerInterface
 
         try {
             $reflected = new ReflectionClass($service);
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             return null;
         }
 
@@ -54,17 +90,7 @@ class Container implements ContainerInterface
         $reflectedConstructor = $reflected->getConstructor();
         $constructorParameters = $reflectedConstructor ? $reflectedConstructor->getParameters() : [];
 
-        $parameters = [];
-        foreach ($constructorParameters as $parameter) {
-            if ($this->parameterIsNotAClass($parameter)) {
-                continue;
-            }
-
-            $class = $parameter->getType()->getName();
-
-            $param = $this->make($class);
-            $parameters[] = $param;
-        }
+        $parameters = $this->instanciateInstanciableParameters($constructorParameters);
 
         $instance = $reflected->newInstance(...array_merge($parameters, $arguments));
 
@@ -80,11 +106,6 @@ class Container implements ContainerInterface
         }
 
         return $this->services[$id];
-    }
-
-    private function parameterIsNotAClass(ReflectionParameter $parameter): bool
-    {
-        return (!$parameter->getType() || $parameter->getType()->isBuiltin());
     }
 
     private function overrideKey(mixed $id, object $service): void
