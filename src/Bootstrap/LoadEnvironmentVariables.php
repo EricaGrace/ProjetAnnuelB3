@@ -14,6 +14,6 @@ class LoadEnvironmentVariables extends Bootstrapper
         $dotenv = new Dotenv();
         $dotenv->loadEnv($this->app->basePath . '/.env');
 
-        $this->app->set('env', $dotenv);
+        $this->app->singleton('env', $dotenv);
     }
 }
