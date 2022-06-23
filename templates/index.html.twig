@@ -1,87 +1,90 @@
 {% extends 'layout.html.twig' %}
 
 {% block link %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
 
 {% block title %}BDE Platform{% endblock %}
 
 {% block header %}
-   <header>
-    <div id="accueil">
-        <div>
+    <header>
+        <div id="accueil">
             <div>
-                <img src="img/logos/logo_blanc.png" alt="logo">
-                <h3> BDE Platform </h3>
+                <div>
+                    <img src="img/logos/logo_blanc.png" alt="logo">
+                    <h3> BDE Platform </h3>
+                </div>
+                <h1>Nous te proposons :</h1>
             </div>
-                <h1>Nous te proposons :</h1> 
-        </div>
-                <div id="carousel_categorie" class="carousel slide" data-bs-ride="carousel">
+            <div id="carousel_categorie" class="carousel slide" data-bs-ride="carousel">
 
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="0" class="active"></button>
-                        <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="1"></button>
-                        <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="2"></button>
-                        <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="3"></button>
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="0"
+                            class="active"></button>
+                    <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="2"></button>
+                    <button type="button" data-bs-target="#carousel_categorie" data-bs-slide-to="3"></button>
+                </div>
+
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="3000">
+                        <a href="evenementsCategorie.html">
+                            <img src="img/icones/bi_person-workspace.svg" alt="afterwork">
+                            <p>Afterwork</p>
+                        </a>
                     </div>
-                 
-                    <div class="carousel-inner" >
-                        <div class="carousel-item active" data-bs-interval="3000">
-                            <a href="evenementsCategorie.html">
-                                <img src="img/icones/bi_person-workspace.svg" alt="afterwork" >
-                                <p>Afterwork</p>
-                            </a>
-                          </div>
-                          <div class="carousel-item" data-bs-interval="3000">
-                            <a href="evenementsCategorie.html">
-                                <img src="img/icones/la_user-friends.svg" alt="integration">
-                                <p>Intégration</p>
-                            </a>
-                          </div>
-                          <div class="carousel-item" data-bs-interval="3000">
-                            <a href="evenementsCategorie.html">
-                                <img src="img/icones/fluent_drink-beer-24-regular.svg" alt="soiree">
-                                <p>Soirée</p>
-                            </a>
-                          </div>
-                          <div class="carousel-item" data-bs-interval="3000">
-                            <a href="evenementsCategorie.html">
-                                <img src="img/icones/icon-park-outline_play-basketball.svg" alt="sport">
-                                <p>Sport</p>
-                            </a>
-                          </div>
+                    <div class="carousel-item" data-bs-interval="3000">
+                        <a href="evenementsCategorie.html">
+                            <img src="img/icones/la_user-friends.svg" alt="integration">
+                            <p>Intégration</p>
+                        </a>
                     </div>
-                  
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel_categorie" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carousel_categorie" data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </button>
-                 </div>
+                    <div class="carousel-item" data-bs-interval="3000">
+                        <a href="evenementsCategorie.html">
+                            <img src="img/icones/fluent_drink-beer-24-regular.svg" alt="soiree">
+                            <p>Soirée</p>
+                        </a>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="3000">
+                        <a href="evenementsCategorie.html">
+                            <img src="img/icones/icon-park-outline_play-basketball.svg" alt="sport">
+                            <p>Sport</p>
+                        </a>
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel_categorie"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel_categorie"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
-    </div> 
-  </header>
-  {% endblock %}
+        </div>
+        </div>
+    </header>
+{% endblock %}
 {% block body %}
-    <main> 
+    <main>
         <section id="evenements">
             <div>
                 <h2>Les évènements</h2>
                 <img src="img/icones/ic_round-event-available.svg" alt="icone evenement">
-            </div>   
+            </div>
             <div>
                 {% for event in events %}
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="{{ event.image }}" alt ="{{ event.title }}">
-                    <div class="bordureRectangleEvenement">
-                        <p>{{ event.title }}</p>
-                        <p>{{ event.category.name }}</p>
-                        <p>{{ event.date|date('d/m/Y') }} à {{ event.date|date('H:m') }}</p>
-                    </div>
-                </a>
+                    <a href="detailsEvenement.html">
+                        <div class="rectanglePleinEvenement"></div>
+                        <img src="{{ event.image }}" alt="{{ event.title }}">
+                        <div class="bordureRectangleEvenement">
+                            <p>{{ event.title }}</p>
+                            <p>{{ event.category.name }}</p>
+                            <p>{{ event.date|date('d/m/Y') }} à {{ event.date|date('H:m') }}</p>
+                        </div>
+                    </a>
                 {% endfor %}
             </div>
 
@@ -96,7 +99,7 @@
 
         <section id="rejoinsNous">
             <div>
-               
+
                 <div>
                     <div class="bordureRectangle"></div>
                     <div class="bordureRectangle"></div>
@@ -108,15 +111,18 @@
             <div>
                 <h2>Rejoins-nous !</h2>
                 <ul>
-                   <li><p>Crée-toi un compte pour participer aux évènements.</p></li>
-                   <li><a href="{{ route('signup') }}" class="btnAvecFond">Je m'inscris <i class="fa-solid fa-pencil"></i></a></li>
-                    <li></li><a href="{{ route('login') }}" class="btnSansFond">Je me connecte <i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
-                </p>
-            </ul>
+                    <li><p>Crée-toi un compte pour participer aux évènements.</p></li>
+                    <li><a href="{{ route('signup') }}" class="btnAvecFond">Je m'inscris <i
+                                    class="fa-solid fa-pencil"></i></a></li>
+                    <li></li>
+                    <a href="{{ route('login') }}" class="btnSansFond">Je me connecte <i
+                                class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
+                    </p>
+                </ul>
             </div>
 
         </section>
-       
+
     </main>
-</div>
+    </div>
 {% endblock %}
