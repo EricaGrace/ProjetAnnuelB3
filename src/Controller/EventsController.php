@@ -18,7 +18,7 @@ class EventsController extends AbstractController
         return $this->renderIf('Evenement/EvenementCategorie.html.twig', [
             'category' => $category,
             'events' => $events
-        ], $category, $events);
+        ], $category);
     }
 
     #[Route(path: '/event/{slug}', httpMethod: 'GET', name: 'event')]
