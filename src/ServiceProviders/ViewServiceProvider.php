@@ -31,5 +31,6 @@ class ViewServiceProvider extends ServiceProvider
 
         $twig->addGlobal('router', $router);
         $twig->addFunction(new TwigFunction('route', fn(...$params) => $router->getRouteUriFromName(...$params)));
+        $twig->addFunction(new TwigFunction('dump', 'dump'));
     }
 }
