@@ -49,7 +49,7 @@ class SignupController extends AbstractController
             ->setPassword($form->get('password'))
             ->setEmail($form->get('email'))
             ->setPhone($form->get('phone'))
-            ->setRole((new Role())->setID(1)->setName('User'))
+            ->setRole((new Role())->setID(1)->setName('user'))
             ->setCreatedAt(new DateTime())
             ->setBirthDate($birthDate);
 
