@@ -28,30 +28,14 @@
                 </div>
 
                 <div class="carousel-inner">
-                    <div class="carousel-item active" data-bs-interval="3000">
-                        <a href="evenementsCategorie.html">
-                            <img src="img/icones/bi_person-workspace.svg" alt="afterwork">
-                            <p>Afterwork</p>
+                    {% for category in global.categories %}
+                    <div class="carousel-item {{ loop.index == 1 ? 'active' : '' }}" data-bs-interval="3000">
+                        <a href="{{ route('event.category', {slug: category.slug}) }}">
+                            <img src="/img/icones/{{ category.slug }}.svg" alt="afterwork">
+                            <p>{{ category.name }}</p>
                         </a>
                     </div>
-                    <div class="carousel-item" data-bs-interval="3000">
-                        <a href="evenementsCategorie.html">
-                            <img src="img/icones/la_user-friends.svg" alt="integration">
-                            <p>Intégration</p>
-                        </a>
-                    </div>
-                    <div class="carousel-item" data-bs-interval="3000">
-                        <a href="evenementsCategorie.html">
-                            <img src="img/icones/fluent_drink-beer-24-regular.svg" alt="soiree">
-                            <p>Soirée</p>
-                        </a>
-                    </div>
-                    <div class="carousel-item" data-bs-interval="3000">
-                        <a href="evenementsCategorie.html">
-                            <img src="img/icones/icon-park-outline_play-basketball.svg" alt="sport">
-                            <p>Sport</p>
-                        </a>
-                    </div>
+                    {% endfor %}
                 </div>
 
                 <button class="carousel-control-prev" type="button" data-bs-target="#carousel_categorie"
