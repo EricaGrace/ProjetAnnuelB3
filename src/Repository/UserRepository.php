@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Entity;
 use App\Entity\User;
 use PDO;
 
@@ -14,7 +15,6 @@ final class UserRepository extends AbstractRepository
     {
         $stmt = $this->pdo->prepare("INSERT INTO users (name, firstName, username, password, email, phone, role, createdAt, birthDate ) VALUES (:name, :firstName, :username, :password, :email, :phone, :role, :createdAt, :birthDate )");
 
-        
         return $stmt->execute([
             'name' => $user->getName(),
             'firstName' => $user->getFirstName(),
@@ -24,7 +24,7 @@ final class UserRepository extends AbstractRepository
             'phone' => $user->getPhone(),
             'role' => $user->getRole()->getId(),
             'createdAt' => $user->getCreatedAt()->format('Y-m-d'),
-           'birthDate' => $user->getBirthDate()->format('Y-m-d')
+            'birthDate' => $user->getBirthDate()->format('Y-m-d')
         ]);
     }
 
@@ -35,6 +35,17 @@ final class UserRepository extends AbstractRepository
         $stmt->execute(['id' => $id]);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetch();
+
+        return ($result !== false) ? $this->hydrate($result) : null;
+    }
+
+    public function findByUsername(string $username): ?Entity
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM " . static::TABLE . " WHERE username=:username");
+
+        $stmt->execute(['username' => $username]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return ($result !== false) ? $this->hydrate($result) : null;
     }

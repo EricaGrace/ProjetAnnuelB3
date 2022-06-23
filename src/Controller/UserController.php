@@ -24,10 +24,10 @@ class UserController extends AbstractController
         );
     }
 
-    #[Route(path: "/user/edit/{id}", name: "user_edit")]
-    public function edit(UserRepository $userRepository, int $id)
+    #[Route(path: "/user/edit/{username}", name: "user_edit")]
+    public function edit(UserRepository $userRepository, string $username)
     {
-        $user = $userRepository->find($id);
+        $user = $userRepository->findByUsername($username);
         dump($user);
     }
 
