@@ -13,15 +13,16 @@ class Container implements ContainerInterface
     private array $services = [];
     private array $singletons = [];
 
-    public function callClassMethod(string $FQCN, string $method, mixed ...$values)
+    public function callClassMethod(string|object $objectOrClass, string $method, mixed ...$values)
     {
-        $method = (new ReflectionClass($FQCN))->getMethod($method);
+        $method = (new ReflectionClass($objectOrClass))->getMethod($method);
         $methodParameters = $method->getParameters();
         $method = $method->name;
 
         $arguments = $this->instanciateInstanciableParameters($methodParameters);
 
-        return $this->make($FQCN)->$method(...array_merge($arguments, $values));
+        $object = gettype($objectOrClass) === 'string' ? $this->make($objectOrClass) : $objectOrClass;
+        return $object->$method(...array_merge($arguments, $values));
     }
 
     /**
