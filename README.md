@@ -78,14 +78,17 @@ $router->addRoute(new Route('/test-index', [IndexController::class, "indextest"]
 
 ````
 
-### Hydratation des données : 
-Pour l'hydratation des données, on a créé un Hydrator implémentant HydratorInterface, qui est automatiquement injecté dans tous les repositories par notre container.
-Il expose une méthode `hydrate(array $values, object $object)` qui, appelée dans un repository, retourne l'objet hydraté.
+### Hydratation des données :
+
+Pour l'hydratation des données, on a créé un Hydrator implémentant HydratorInterface, qui est automatiquement injecté
+dans tous les repositories par notre container. Il expose une méthode `hydrate(array $values, object $object)` qui,
+appelée dans un repository, retourne l'objet hydraté.
 
 Pour ce faire, il parcoure le tableau de `$values` et pour chaque valeur, trouve sa propriété et devine son setter.  
 Avant d'appeler ce setter, il regarde si un attribut "Hydrator" existe sur la propriété.
 
-Enfin, si aucun setter n'est trouvé et que l'attribut Hydrator n'est pas défini, l'hydrateur essaiera en dernier recours de setter la propriété avec Réflection.
+Enfin, si aucun setter n'est trouvé et que l'attribut Hydrator n'est pas défini, l'hydrateur essaiera en dernier recours
+de setter la propriété avec Réflection.
 
 ````php
 class User
@@ -99,12 +102,16 @@ class User
 }
 ````
 
-L'attribut Hydrator définit une stratégie. Chaque Stratégie est une classe implémentant l'interface `App\Database\Hydration\Strategies\StrategyInterface`.
-Les stratégies exposent donc elles aussi et à coup sûr, une méthode `hydrate()`.
+L'attribut Hydrator définit une stratégie. Chaque Stratégie est une classe implémentant
+l'interface `App\Database\Hydration\Strategies\StrategyInterface`. Les stratégies exposent donc elles aussi et à coup
+sûr, une méthode `hydrate()`.
 
-Si l'attribut Hydrator est trouvé, l'hydrateur appellera la méthode `hydrate()` de la stratégie plutôt que le setter qu'il a deviné.
+Si l'attribut Hydrator est trouvé, l'hydrateur appellera la méthode `hydrate()` de la stratégie plutôt que le setter
+qu'il a deviné.
 
-L'implémentation suivante permet par exemple de setter la propriété birthdate de l'entité 'User' en retournant un DateTime.
+L'implémentation suivante permet par exemple de setter la propriété birthdate de l'entité 'User' en retournant un
+DateTime.
+
 ````php
 class DateTimeStrategy implements StrategyInterface
 {
@@ -117,12 +124,14 @@ class DateTimeStrategy implements StrategyInterface
         }
     }
 ````
+
 ---
+
 ### Les stratégies sont automatiquement créés par le container, ce qui nous offre une grande flexibilité :
 
 > **Par exemple:**   
 > Pour instaurer un système de parrainage, on peut ajouter à la table 'user' de la bdd une colonne 'parrain' qui détient une clé étrangère vers l'id d'un autre utilisateur.
-> 
+>
 > On rajoute la propriété à notre Entité:
 > ````php
 > class User
@@ -134,10 +143,10 @@ class DateTimeStrategy implements StrategyInterface
 >     
 >     // ...
 > ````
-> 
+>
 > Et on créé la classe UserStrategy. Comme UserStrategy est instancié par le IoC container, ses dépendances sont automatiquement injectées.  
 > On peut donc type-hinter le `UserRepository`, puis l'utiliser dans notre fonction hydrate pour retourner le parrain de l'utilisateur :
-> 
+>
 > ````php
 > use App\Repository\UserRepository;
 > 
@@ -157,30 +166,33 @@ class DateTimeStrategy implements StrategyInterface
 >     }
 > }
 > ````
-> 
-> Lorsque l'on `dump()` un utilisateur ayant un parrain on obtient : 
-> 
+>
+> Lorsque l'on `dump()` un utilisateur ayant un parrain on obtient :
+>
 > ![dump](docs/hydration-user.png)
-
 
 ## Kernel, Response & PSR-7
 
-Jusqu'à présent, notre application ne disposait que d'un objet Request que l'on pouvait manipuler pour récupérer les informations de la requête entrante. 
-La requête était passée à notre routeur qui se chargeait d'appeler le controlleur associé, celui-ci appliquait sa logique, puis faisait un `echo` d'une template twig par exemple.
-Ce echo envoie automatiquement les headers et le contenu de la page. 
+Jusqu'à présent, notre application ne disposait que d'un objet Request que l'on pouvait manipuler pour récupérer les
+informations de la requête entrante. La requête était passée à notre routeur qui se chargeait d'appeler le controlleur
+associé, celui-ci appliquait sa logique, puis faisait un `echo` d'une template twig par exemple. Ce echo envoie
+automatiquement les headers et le contenu de la page.
 
-On a décidé de remplacer ce fonctionnement par un objet `Symfony\Component\HttpFoundation\Response` qui détient le content, les headers, et le response code. 
+On a décidé de remplacer ce fonctionnement par un objet `Symfony\Component\HttpFoundation\Response` qui détient le
+content, les headers, et le response code.
 > /!\ Response de Symfony n'est pas compatible avec PSR-7. Il peut l'être à l'aide de [PSR-7 bridge](https://symfony.com/doc/current/components/psr7.html)
 
-Le nouveau fonctionnement est le suivant: 
+Le nouveau fonctionnement est le suivant:
+
 1. La requête est créée puis passée au Kernel
 2. Le Kernel crée un objet Response
 3. Il appelle le routeur qui peut retourner soit une string, soit un objet Response
 4. Le kernel renvoie un objet Response qui est envoyée avec la méthode `send()`
 
--> Les méthodes du routeur peuvent désormais `return` une template twig, ou une Response. 
+-> Les méthodes du routeur peuvent désormais `return` une template twig, ou une Response.
 
 Par exemple:
+
 ````php
 // IndexController.php
 
@@ -199,4 +211,30 @@ public function index()
 {
     return new RedirectResponse('/contact');
 }
+````
+
+### Le `route()` helper
+
+Pour suivre l'exemple de Laravel (symfony aussi j'imagine), on a ajouté à Twig un helper `route()` qui pointe vers la
+fonction `getRouteUriFromName` du routeur. On passe aussi notre routeur à Twig (ce qui n'est pas absolument nécessaire,
+mais why not).
+
+````php
+// ViewServiceProvider.php
+$twig->addGlobal('router', $router);
+$twig->addFunction(new TwigFunction('route', fn(...$params) => $router->getRouteUriFromName(...$params)));
+````
+
+La fonction `getRouteUriFromName()` et donc `route()` dans le contexte de twig prend deux paramètres: le nom de la
+route, puis un tableau associatif de valeurs.
+`getRouteUriFromName` retrouvera la route, et remplira automatiquement l'uri avec les valeurs passées par exemple :
+
+Ce qui nous permet de faire :
+
+````php
+// dans le contexte de php:
+$router->route('user_edit', ['id' => 12]) // donnera '/user/edit/1'
+
+// dans le contexte twig:
+{{ route('user_edit', {'id': 12}) }} // donnera '/user/edit/1'
 ````
