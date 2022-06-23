@@ -15,18 +15,15 @@ class Router
     private const CONTROLLERS_DIR = __DIR__ . "/../Controller";
     /** @var Route[] */
     private array $routes = [];
-    private ContainerInterface $container;
     private ArgumentResolver $argumentResolver;
     private Application $app;
 
     public function __construct(
         Application        $app,
-        ContainerInterface $container,
         ArgumentResolver   $argumentResolver
     )
     {
         $this->app = $app;
-        $this->container = $container;
         $this->argumentResolver = $argumentResolver;
     }
 
@@ -46,7 +43,7 @@ class Router
             throw new RouteNotFoundException();
         }
 
-        return $this->app->callClassMethod($route->getController(), $route->getMethod());
+        return $this->app->callClassMethod($route->getController(), $route->getMethod(), ...$route->getGetParams());
     }
 
     /**
