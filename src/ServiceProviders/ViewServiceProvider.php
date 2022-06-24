@@ -2,6 +2,7 @@
 
 namespace App\ServiceProviders;
 
+use App\Auth\Authenticator;
 use App\Controller\GlobalController;
 use App\Routing\Router;
 use Twig\Environment;
@@ -25,10 +26,12 @@ class ViewServiceProvider extends ServiceProvider
         ]));
     }
 
-    function boot(Environment $twig, Router $router)
+    function boot(Environment $twig, Router $router, Authenticator $authenticator)
     {
+
         $twig->addGlobal('router', $router);
-        $twig->addFunction(new TwigFunction('route', fn(...$params) => $router->getRouteUriFromName(...$params)));
+        $twig->addGlobal('auth', $authenticator);
+        $twig->addFunction(new TwigFunction('route', fn(...$params) => $router->route(...$params)));
         $twig->addFunction(new TwigFunction('dump', 'dump'));
 
         $method = $this->app->callClassMethod(GlobalController::class, 'getGlobalData');
