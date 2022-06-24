@@ -10,7 +10,7 @@ class SessionServiceProvider extends ServiceProvider
 
     function register(): void
     {
-        $this->app->set(SessionInterface::class, Session::class);
+        $this->app->singleton(SessionInterface::class, Session::class);
     }
 
     function boot()
