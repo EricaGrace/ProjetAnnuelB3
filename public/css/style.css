@@ -442,6 +442,7 @@ STYLE INDEX
 
 #evenements > div:last-of-type{
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 75px 11%;
   margin-bottom: 80px; 
