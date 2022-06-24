@@ -1,15 +1,20 @@
-{% extends 'layout.html.twig' %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <title>{% block title %}BDE Platform{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="/img/logos/favicon.ico">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Neucha&family=Open+Sans&display=swap" rel="stylesheet">
 
-{% block header %}
-    <div>
-        <h1>Administration</h1>
-        <span class="iconify" data-icon="bytesize:settings"></span>
-        <ul id="menu-admin">
-            <li><a href="{{ route('event.add') }}" class="menuSelectionne">Ajouter un évènement</a></li>
-            <li><a href="{{ route('event.edit') }}">Modifier un évènement</a></li>
-            <li><a href="{{ route('event.remove') }}">Supprimer un évènement</a></li>
-            <li><a href="{{ route('category.add') }}">Ajouter une catégorie</a></li>
-            <li><a href="{{ route('user.add') }}">Ajouter un utilisateur</a></li>
-        </ul>
-    </div>
-{% endblock %}
+        <link rel="stylesheet" href="/css/normalize.css">
+        <link rel="stylesheet" href="/css/base.css">
+        <link rel="stylesheet" href="/css/all.css">
+        <link rel="stylesheet" href="/css/styleForm.css">
+    {% endblock %}
+</head>
+
+{% block body %}  {% endblock %}
+</html>

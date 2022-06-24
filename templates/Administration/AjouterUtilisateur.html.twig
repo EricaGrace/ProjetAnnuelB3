@@ -1,39 +1,48 @@
-{% extends 'layoutad.html.twig' %}
+{% extends 'layoutadmin.html.twig' %}
 
 {% block title %} Ajouter un utilisateur{% endblock %}
 
   {% block body %}
-    <main>
-      <section id="formulaire">
-          <div><h2>Ajouter un utilisateur</h2></div>
-          <form action="" method="post" enctype="multipart/form-data">
-              <ul>
-                <li>
-                  <label for="first_name">Prénom</label> <br> 
-                  <input type="text" name="first_name" id="first_name">
-                </li>
-                <li>
-                    <label for="last_name">Nom</label> <br> 
-                    <input type="text" name="last_name" id="last_name">
-                  </li>
-                  <li>
-                    <label for="email">Courriel</label> <br> 
-                    <input type="email" name="email" id="email">
-                  </li>
-                  <li>
-                    <label for="role">Rôle</label><br>
-                    <select id="role" name="role">
-                      <option value="etudiant">Etudiant</option>
-                      <option value="membre">Membre</option>
-                      <option value="administrateur">Administrateur</option>
-                    </select>
-                  </li>            
-                  <li>
-                    <button  type="submit">Ajouter <i class="fa-solid fa-plus"></i></button>
-                  </li>
-              </ul>
-        </form>
-      </section> 
-    </main>
-{% endblock %}
+      <main>
+          <section id="formulaire">
+              <div><h2>Ajouter un utilisateur</h2></div>
+              {% if messages %}
+                  <div style="background: rgba(215,53,53,0.39); border: 1px solid #880505; padding: 10px 30px; display: block">
+                      <ul>
+                          {% for message in messages %}
+                              <li>{{ message }}</li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+              {% endif %}
+              <form action="" method="post" enctype="multipart/form-data">
+                  <ul>
+                      <li>
+                          <label for="first_name">Prénom</label> <br>
+                          <input type="text" name="first_name" id="first_name">
+                      </li>
+                      <li>
+                          <label for="last_name">Nom</label> <br>
+                          <input type="text" name="last_name" id="last_name">
+                      </li>
+                      <li>
+                          <label for="email">Courriel</label> <br>
+                          <input type="email" name="email" id="email">
+                      </li>
+                      <li>
+                          <label for="role">Rôle</label><br>
+                          <select id="role" name="role">
+                              <option value="etudiant">Etudiant</option>
+                              <option value="membre">Membre</option>
+                              <option value="administrateur">Administrateur</option>
+                          </select>
+                      </li>
+                      <li>
+                          <button type="submit">Ajouter <i class="fa-solid fa-plus"></i></button>
+                      </li>
+                  </ul>
+              </form>
+          </section>
+      </main>
+  {% endblock %}
   
