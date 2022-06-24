@@ -23,6 +23,7 @@ class AdminController extends AbstractController
         return $this->render('Administration/AjouterEvenement.html.twig');
     }
 
+    // TODO: refactoriser
     #[Route('/admin/event/add', httpMethod: 'POST')]
     public function storeEvent(Request $request, Config $config, EventRepository $eventRepository)
     {
@@ -35,7 +36,7 @@ class AdminController extends AbstractController
             Validator::trueVal()->assert((bool)$eventRepository->findBySlug($form->get('slug')));
             Validator::date()->assert($date = $form->get('date'));
             Validator::numericVal()->min(0)->assert($price = $form->get('price'));
-            Validator::intVal()->min(0)->assert($form->get('maxAttendees'));
+            Validator::intVal()->min(0)->assert($maxAttendees = $form->get('maxAttendees'));
             Validator::image()->validate($image->getClientOriginalName());
             Validator::stringType()->validate($description = $form->get('description'));
 
