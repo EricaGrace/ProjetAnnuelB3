@@ -14,7 +14,15 @@
             <i class="fa-solid fa-pencil"></i>
         </div>
 </header>
-
+ {% if messages %}
+                <div style="background: rgba(215,53,53,0.39); border: 1px solid #880505; padding: 10px 30px; display: block">
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
     <main>
         <section>
         <form action="" method="post">
@@ -25,27 +33,27 @@
                 </li>
                 <li>
                     <label for="last_name">Nom</label> <br> 
-                    <input type="text" name="last_name" id="last_name">
+                    <input type="text" name="last_name" id="last_name" value="{{ old.get('last_name') }}">
                 </li>
                  <li>
                     <label for="phone">Téléphone</label> <br> 
-                    <input type="text"  name="phone" id="phone"/>
+                    <input type="text"  name="phone" id="phone" value="{{ old.get('phone') }}"/>
                 </li>
                    <li>
                     <label for="birthdate">Date de naissance</label> <br> 
-                    <input type="datetime"  name="birthdate" id="birthdate"/>
+                    <input type="datetime"  name="birthdate" id="birthdate" value="{{ old.get('birthdate') }}"/>
                 </li>
                 <li>
                     <label for="username">Nom d'utilisateur</label> <br> 
-                    <input type="text" name="username" id="username">
+                    <input type="text" name="username" id="username"value="{{ old.get('username') }}">
                 </li>
                 <li>
                     <label for="email">Email</label> <br> 
-                    <input type="email" name="email" id="email">
+                    <input type="email" name="email" id="email" value="{{ old.get('email') }}">
                 </li>
                 <li>
                     <label for="password">Mot de passe</label> <br> 
-                    <input type="password" name="password" id="password">
+                    <input type="password" name="password" id="password" value="{{ old.get('password') }}">
                 </li>
                 <li>                   
                 <button  type="submit" id="inscription"> Je m'inscris <i class="fa-solid fa-pencil"></i></button>
