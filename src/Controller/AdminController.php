@@ -7,6 +7,7 @@ use App\Entity\EventCategory;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\EventRepository;
+use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use App\Utils\Config;
@@ -69,9 +70,12 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/user/add', name: 'user.add')]
-    public function addUser()
+    public function addUser(RoleRepository $roleRepository)
     {
-        return $this->render('Administration/AjouterUtilisateur.html.twig');
+        $roles = $roleRepository->findAll();
+        return $this->render('Administration/AjouterUtilisateur.html.twig', [
+            "roles" => $roles
+        ]);
     }
 
     #[Route('/admin/user/add', httpMethod: 'POST')]

@@ -32,9 +32,9 @@
                       <li>
                           <label for="role">Rôle</label><br>
                           <select id="role" name="role">
-                              <option value="etudiant">Etudiant</option>
-                              <option value="membre">Membre</option>
-                              <option value="administrateur">Administrateur</option>
+                            {% for role in roles %}
+                              <option value="{{ role.getId }}"> {{ role.getName }}</option>
+                            {% endfor %}
                           </select>
                       </li>
                       <li>

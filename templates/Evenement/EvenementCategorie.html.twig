@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %} <h1>Les évènements Afterwork</h1> {% endblock %}
+{% block pagetitle %} <h1>Les évènements {{ category.name|lower }}</h1> {% endblock %}
 
 {% block body %}
     <main>
@@ -16,13 +16,6 @@
                     <h2>Oh non! Pas d'évènements pour la catégorie {{ category.name|lower }}</h2>
                 {% endif %}
             </div>
-
-            <p>
-                <a href="#evenements" id="numPageEvenement">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-            </p>
 
         </section>
     </main>
