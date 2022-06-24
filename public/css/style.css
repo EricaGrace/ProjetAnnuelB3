@@ -358,7 +358,7 @@ footer .bordureRectangle:nth-child(2){
 }
 
 footer .btnSansFond{
-  color:white;
+  color:white !important;
 }
 
 footer div:nth-child(3){
@@ -442,7 +442,6 @@ STYLE INDEX
 
 #evenements > div:last-of-type{
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   gap: 75px 11%;
   margin-bottom: 80px; 
