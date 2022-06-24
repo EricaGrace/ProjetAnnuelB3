@@ -136,4 +136,12 @@ class Router
 
         return !empty($route) ? array_values($route)[0] : null;
     }
+
+    /**
+     * Helper: returns the route uri from the route name and passed values
+     */
+    public function route(string $name, array $values = []): ?string
+    {
+        return $this->getRouteUriFromName($name, $values);
+    }
 }
