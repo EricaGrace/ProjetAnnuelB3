@@ -14,13 +14,14 @@
             <i class="fa-solid fa-pencil"></i>
         </div>
 </header>
+
     <main>
         <section>
         <form action="" method="post">
             <ul>
                 <li>
                     <label for="first_name">Prénom</label> <br> 
-                    <input type="text" name="first_name" id="first_name">
+                    <input type="text" name="first_name" id="first_name" value="{{ old.get('first_name') }}">
                 </li>
                 <li>
                     <label for="last_name">Nom</label> <br> 
