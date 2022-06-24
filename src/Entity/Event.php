@@ -28,7 +28,7 @@ class Event implements Entity
     private User $creator;
 
     #[Hydrator(strategy: VenueStrategy::class)]
-    private Venue $venue;
+    private ?Venue $venue;
 
     public function getId(): int
     {

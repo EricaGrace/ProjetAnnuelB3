@@ -47,6 +47,7 @@ class AdminController extends AbstractController
             Validator::date()->assert($date = $post->get('date'));
             Validator::numericVal()->min(0)->assert($price = $post->get('price'));
             Validator::intVal()->min(0)->assert($maxAttendees = $post->get('maxAttendees'));
+            Validator::trueVal()->validate(isset($image));
             Validator::image()->validate($image->getClientOriginalName());
             Validator::stringType()->validate($description = $post->get('description'));
         } catch (NestedValidationException $exception) {
@@ -61,8 +62,8 @@ class AdminController extends AbstractController
         }
 
         $uploadFolderPath = $config('uploads')['images'];
-        $image = $image->move(dirname(__DIR__, 2) . "public/$uploadFolderPath", $image->getFileName() . '.' . $image->getClientOriginalExtension());
-        $imagePathname = $uploadFolderPath . $image->getFilename();
+        $image = $image->move('/' . dirname(__DIR__, 2) . "public/$uploadFolderPath", $image->getFileName() . '.' . $image->getClientOriginalExtension());
+        $imagePathname = '/'. $uploadFolderPath . $image->getFilename();
 
         $event = (new Event())
             ->setTitle($title)
@@ -96,26 +97,30 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/user/add', httpMethod: 'POST')]
-    public function storeUser(Request $request, UserRepository $userRepository)
+    public function storeUser(Request $request, UserRepository $userRepository, RoleRepository $roleRepository)
     {
         $post = $request->request;
 
         try {
-            Validator::alpha()->assert($post->get('last_name'));
-            Validator::alpha()->assert($post->get('first_name'));
-            Validator::alnum()->assert($post->get('username'));
+            Validator::alpha(' ')->assert($post->get('first_name'));
+            Validator::alpha(' ')->assert($post->get('last_name'));
+            //Validator::optional(Validator::alnum()->key('username'))->assert($post->get('username'));
             Validator::alnum()->assert($post->get('password'));
             Validator::email()->assert($post->get('email'));
+            Validator::falseVal()->key('emailExists')->assert((bool)$userRepository->findByEmail($post->get('email')));
             Validator::optional(Validator::phone())->assert($post->get('phone'));
-            Validator::optional(Validator::date('d/m/Y'))->assert($post->get('birthdate'));
+            Validator::optional(Validator::date())->assert($post->get('birthdate'));
         } catch (NestedValidationException $exception) {
             return $this->render('Administration/AjouterUtilisateur.html.twig', [
-                'messages' => $exception->getMessages(),
+                'messages' => $exception->getMessages([
+                    'emailExists' => "Un utilisateur avec cette adresse existe déjà."
+                ]),
+                'roles' => $roleRepository->findAll(),
                 'old' => $post
             ]);
         }
 
-        $birthDate = DateTime::createFromFormat('d/m/Y', $post->get('birthdate'));
+        $birthDate = new DateTime($post->get('birthdate'));
 
         $user = (new User())->setName($post->get('last_name'))
             ->setFirstName($post->get('first_name'))
@@ -131,6 +136,7 @@ class AdminController extends AbstractController
 
         return $this->render('Administration/AjouterUtilisateur.html.twig', [
             'action' => 'Ajouter',
+            'roles' => $roleRepository->findAll(),
             'messages' => ['Utilisateur ajouté']
         ]);
     }

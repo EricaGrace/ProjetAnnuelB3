@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 
+{% block title %}{{ category.name }}{% endblock %}
+
 {% block pagetitle %} <h1>Les évènements {{ category.name|lower }}</h1> {% endblock %}
 
 {% block body %}

@@ -22,10 +22,9 @@ class AuthController extends AbstractController
     {
         $form = $request->request;
 
-
         try {
-            Validator::alpha('')->assert($form->get('last_name'));
-            Validator::alpha('')->assert($form->get('first_name'));
+            Validator::alpha(' ')->assert($form->get('last_name'));
+            Validator::alpha(' ')->assert($form->get('first_name'));
             Validator::alnum()->assert($form->get('username'));
             Validator::alnum()->assert($form->get('password'));
             Validator::email()->assert($form->get('email'));
@@ -41,7 +40,6 @@ class AuthController extends AbstractController
         }
 
         $user = new User();
-
         $birthDate = DateTime::createFromFormat('d/m/Y', $form->get('birthdate'));
 
         $user->setName($form->get('last_name'))

@@ -11,25 +11,38 @@
                   <ul>
                       <li>
                           <label for="first_name">Prénom</label> <br>
-                          <input type="text" name="first_name" id="first_name">
+                          <input type="text" name="first_name" id="first_name" value="{{ old.get('first_name') }}">
                       </li>
                       <li>
                           <label for="last_name">Nom</label> <br>
-                          <input type="text" name="last_name" id="last_name">
+                          <input type="text" name="last_name" id="last_name" value="{{ old.get('last_name') }}">
+                      </li>
+                      <li>
+                          <label for="username">Username</label> <br>
+                          <input type="text" name="username" id="username" value="{{ old.get('username') }}">
+                      </li>
+                      <li>
+                          <label for="password">Mot de passe</label> <br>
+                          <input type="password" name="password" id="password" value="{{ old.get('password') }}">
+                      </li>
+                      <li>
+                          <label for="birthdate">Date de naissance</label> <br>
+                          <input type="date"  name="birthdate" id="birthdate" value="{{ old.get('birthdate') }}">
                       </li>
                       <li>
                           <label for="email">Courriel</label> <br>
-                          <input type="email" name="email" id="email">
+                          <input type="email" name="email" id="email" value="{{ old.get('email') }}">
                       </li>
                        <li>
                          <label for="phone">Téléphone</label> <br> 
-                         <input type="text"  name="phone" id="phone"/>
+                         <input type="text"  name="phone" id="phone" value="{{ old.get('phone') }}"/>
                         </li>
                       <li>
                           <label for="role">Rôle</label><br>
                           <select id="role" name="role">
                             {% for role in roles %}
-                              <option value="{{ role.getId }}"> {{ role.getName }}</option>
+                              <option value="{{ role.getId }}"
+                              {% if old.get(role.getId) == role.getId %}selected{% endif %}> {{ role.getName }}</option>
                             {% endfor %}
                           </select>
                       </li>

@@ -14,7 +14,7 @@ class EventRepository extends AbstractRepository
 
     public function save(Event $event)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO " . static::TABLE . " (title, category, slug, date, maxAttendees, creator, price, description, image ) VALUES (:title, :category, :slug, :date, :maxAttendees, :creator, :price, :description, :image )");
+        $stmt = $this->pdo->prepare("INSERT INTO " . static::TABLE . " (title, category, slug, date, maxAttendees, creator, price, description, image, venue ) VALUES (:title, :category, :slug, :date, :maxAttendees, :creator, :price, :description, :image, :venue )");
 
         return $stmt->execute([
             'title' => $event->getTitle(),
@@ -25,7 +25,8 @@ class EventRepository extends AbstractRepository
             'creator' => $event->getCreator()->getId(),
             'price' => $event->getPrice(),
             'description' => $event->getDescription(),
-            'image' => $event->getImage()
+            'image' => $event->getImage(),
+            'venue' => 1
         ]);
     }
 }
