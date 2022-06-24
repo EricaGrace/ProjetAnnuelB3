@@ -1,26 +1,13 @@
 # Projet Annuel
 
-## ToDo:
-
-- add dot notation to config class using the php dot notation package
-- Route class should use a callable instead of 2 arguments
 
 ## Changelog
 
-- Created a Config class for retrieving configuration values
-- Allowed container services to be referenced by multiple aliases by passing an array to `set()` :
+### Remaniement de l'application
 
-````php
-$app->set(KernelInterface::class, $kernel)
-// OR : 
-$app->set([KernelInterface::class, 'kernel'], $kernel)
-````
+On a séparé le bootstrapping de notre application (= les services qui sont absolument nécessaire au fonctionnement le plus basique de notre application), par des 'Bootstrappers'.
 
-- Separated the bootstrapping of our applications into Bootstrappers extending Bootstrapper
-- Extracted the `getMethodServiceParams()` method of the router into a `Container::make()` method that can be used
-  anywere
-- The make method is a way of resolving dependencies by injecting them from our IoC container into the class constructor
-
+La méthode `getMethodServiceParams()` du routeur a été extraite en une fonction du container `Container::make()` pour resolver nos dépendances AUTOMATIQUEMENT, en injectant toute dépendance requise dans le constructeur de la classe.
 > Attention, cela a rendu notre container non conforme à psr-11. La méthode `get` devrait prendre l'implémentation de `make` pour être conforme. Ce n'est pas encore le cas pour des raisons de compatibilité. Du refactoring reste à faire.
 
 Les service providers nous permettent, au lieu de faire ça:
@@ -50,26 +37,10 @@ class RoutesServiceProvider extends ServiceProvider
 }
 ````
 
-On a pu déplacer le chargement des variables d'environnement dans un bootstrapper.
-
 Service providers : classes USED by our app Bootstrappers : service providers REQUIRED by our app
 
 Séparer les service providers des bootstrappers permet de pouvoir réutiliser la code 'project-agnostic' sur un autre
 projet à la manière d'un framework.
-
-````php
-// Instead of this : 
-$router->addRoute(new Route('/test-index', IndexController::class, "indextest"));
-
-// Callable would allow us to register routes on the fly
-$router->addRoute(new Route('/test-index', function() {
-    return $this->view('index.html.twig')
-} ));
-
-// While somewhat preserving the original syntax:  
-$router->addRoute(new Route('/test-index', [IndexController::class, "indextest"]));
-
-````
 
 ### Hydratation des données :
 
@@ -169,7 +140,7 @@ effectuera la requette principale avec le `findAll()` de l'AbstractRepository, +
 parrains. Soit n+1 requêtes. Sur 10 users, cela reste négligeable, mais l'entité Event possède des références vers
 EventCategory, User, et Venue...
 
-## Kernel, Response & PSR-7
+### Kernel, Response & PSR-7
 
 Jusqu'à présent, notre application ne disposait que d'un objet Request que l'on pouvait manipuler pour récupérer les
 informations de la requête entrante. La requête était passée à notre routeur qui se chargeait d'appeler le controlleur
@@ -377,3 +348,23 @@ return $this->renderIf('Evenement/EvenementCategorie.html.twig', [
     'category' => $category
 ], $category); // On peut ajouter autant de conditions que voulu
 ````
+
+## Pour aller plus loin:
+
+- add dot notation to config class using the php dot notation package
+- Passer un callable PHP au routeur plutôt que deux paramètres :
+````php
+// Instead of this : 
+$router->addRoute(new Route('/test-index', IndexController::class, "indextest"));
+
+// Callable would allow us to register routes on the fly
+$router->addRoute(new Route('/test-index', function() {
+    return $this->view('index.html.twig')
+} ));
+
+// While somewhat preserving the original syntax:  
+$router->addRoute(new Route('/test-index', [IndexController::class, "indextest"]));
+
+````
+- Ajouter des middlewares
+- Extraire la logique de validation des Entités hors des Controllers.
