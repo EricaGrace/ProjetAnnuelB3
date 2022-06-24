@@ -8,6 +8,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+use App\Repository\EventCategoryRepository;
 use App\Routing\Attribute\Route;
 use App\Utils\Config;
 use DateTime;
@@ -110,4 +111,40 @@ class AdminController extends AbstractController
 
         return $this->render('Administration/AjouterUtilisateur.html.twig');
     }
-}
+
+	#[Route('/admin/categorie/add', name: 'categorie.add')]
+	public function addCategorie()
+	{
+		return $this->render('Administration/AjouterCategorie.html.twig');
+	}
+
+	// TODO: refactoriser
+	#[Route('/admin/categorie/add', httpMethod: 'POST')]
+	public function storeCategorie(Request $request, Config $config, EventCategoryRepository $EventCategoryRepository)
+	{
+		$post = $request->request;
+		$image = $request->files->getIterator()->current();
+
+		try {
+			Validator::alpha()->assert($title = $post->get('name'));
+			Validator::image()->validate($image->getClientOriginalName());
+		} catch (NestedValidationException $exception) {
+			return $this->render('Administration/AjouterCategorie.html.twig', [
+				'messages' => $exception->getMessages(),
+				'old' => $post
+			]);
+		}
+
+		$uploadFolderPath = $config('uploads')['images'];
+		$image = $image->move(dirname(__DIR__, 2) . "public/$uploadFolderPath", $image->getFileName() . '.' . $image->getClientOriginalExtension());
+		$imagePathname = $uploadFolderPath . $image->getFilename();
+
+		$categorie = (new EventCategory())
+			->setName($title)
+			->setImage($imagePathname);
+
+		$EventCategoryRepository->save($categorie);
+
+		return $this->render('Administration/AjouterCategorie.html.twig');
+	}
+} 

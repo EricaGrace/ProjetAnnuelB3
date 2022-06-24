@@ -20,8 +20,10 @@ class SignupController extends AbstractController
     #[Route(path: "/signup", name: "signup", httpMethod: 'POST')]
     public function signUp (UserRepository $userRepository, Request $request, Router $router)
     {
+       /* It's getting the request from the form. */
         $form = $request->request;
         
+       /* It's checking if the form is valid. */
         try {
             Validator::alpha()->assert($form->get('last_name'));
             Validator::alpha()->assert($form->get('first_name'));
@@ -31,7 +33,6 @@ class SignupController extends AbstractController
             Validator::Phone()->assert($form->get('phone'));
             Validator::date('d/m/Y')->assert($form->get('birthdate'));
         } catch(NestedValidationException $exception) {
-
             return $this->render('User/inscription.html.twig',  [
                 'messages' => $exception->getMessages(),
                 'old' => $form
@@ -43,6 +44,7 @@ class SignupController extends AbstractController
 
         $birthDate = DateTime::createFromFormat('d/m/Y', $form->get('birthdate'));
 
+       /* It's setting the user's information. */
         $user->setName($form->get('last_name'))
             ->setFirstName($form->get('first_name'))
             ->setUsername($form->get('username'))
@@ -55,12 +57,14 @@ class SignupController extends AbstractController
 
         $userRepository->save($user);
 
+       /* It's redirecting the user to the login page. */
         return new RedirectResponse($router->getRouteUriFromName('login')); 
     }
 
     #[Route(path: "/signup", name: "signup", httpMethod: 'GET')]
     public function index ()
     {
+       /* It's rendering the signup page. */
         return $this->render(
             'user/inscription.html.twig',
         );

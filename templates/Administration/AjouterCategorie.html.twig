@@ -1,45 +1,47 @@
-{% extends 'layout.html.twig' %}
+{% extends 'layoutadmin.html.twig' %}
 
 {% block title %} Ajouter une catégorie {% endblock %}
 
-{% block header %}
-           <div>
-            <h1>Administration</h1>
-            <span class="iconify" data-icon="bytesize:settings"></span> 
-                <ul id="menu-admin">
-                    <li><a href="ajouterEvenement.html">Ajouter un évènement</a></li>
-                    <li><a href="modifierEvenement.html">Modifier un évènement</a></li>
-                    <li><a href="supprimerEvenement.html">Supprimer un évènement</a></li>
-                    <li><a href="ajouterCategorie.html" class="menuSelectionne">Ajouter une catégorie</a></li>
-                    <li><a href="ajouterUtilisateur.html">Ajouter un utilisateur</a></li>
-                </ul>
-            </div>    
-{% endblock %}
 {% block body %}
     <main>
-      <section id="formulaire">
-          <div><h2>Ajouter une catégorie</h2></div>
-          <form action="" method="post" enctype="multipart/form-data">
-              <ul>
-                  <li>
-                    <label for="name">Nom</label> <br> 
-                    <input type="text" name="name" id="name">
-                  </li>           
-                  <li>Icône</li>
-                  <li>
-                    <label for="file" class="labelFichier">Télécharger <i class="fa-solid fa-arrow-up-from-bracket"></i></label>
-                    <input type="file" name="image" id="file">
-                    <p class="file-name"></p>
-                  </li>
-                  <button  type="submit">Ajouter <i class="fa-solid fa-plus"></i></button>
-                  </li>
-              </ul>
-        </form>
-      </section>
-       
+        <section id="formulaire">
+            <div><h2>Ajouter une catégorie</h2></div>
+            {% if messages %}
+                <div style="background: rgba(215,53,53,0.39); border: 1px solid #880505; padding: 10px 30px; display: block">
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <form action="" method="post" enctype="multipart/form-data">
+                <ul>
+                    <li>
+                        <label for="title">Nom</label> <br>
+                        <input type="text" name="name" id="name" value="{{ old.get('name') ?? '' }}">
+                    </li>
+                <li>
+                        <label for="slug">Slug</label> <br>
+                        <input type="text" name="slug" id="slug" value="{{ old.get('slug') ?? '' }}">
+                    </li>
+                    <li>Icône</li>
+                    <li>
+                        <label for="file" class="labelFichier">Télécharger <i
+                                    class="fa-solid fa-arrow-up-from-bracket"></i></label>
+                        <input type="file" name="image" id="file">
+                        <p class="file-name"></p>
+                    </li>
+                
+                    <li>
+                        <button type="submit">Ajouter <i class="fa-solid fa-plus"></i></button>
+                    </li>
+                </ul>
+            </form>
+        </section>
+
     </main>
+
 {% endblock %}
-
-{% block javascripts %}<script src="js/uploadfile.js" defer></script>{% endblock %}
-
-    
+{% block javascripts %}
+    <script src="js/uploadfile.js"></script>  {% endblock %}
