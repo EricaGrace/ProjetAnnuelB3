@@ -3,76 +3,79 @@
 {% block title %} Mon compte {% endblock %}
 
 {% block header %}
-             <div>
-                <h1>Bonjour Mélanie !</h1> 
-                <span class="iconify" data-icon="icon-park-outline:people"></span>
-            </div>
-    {% endblock %}
-    {% block body %}    
-    <main>
-      <section id="infosPerso">
-          <div><h2>Tes informations personnelles</h2></div>
-          <div>
-              <ul>
-                  <li><p>Prénom</p></li>
-                  <li><p>Nom</p></li>
-                  <li><p>Courriel</p></li>
-                  <li><p>Téléphone</p></li>
-                  <li><p>Rôle</p></li>
-              </ul>
-              <ul>
-                 <li><p>Mélanie</p></li>
-                <li><p>Durand</p></li>
-                <li><p>melaniedurand@exemple.com</p></li>
-                <li><p>07 58 69 15 89</p></li>
-                <li><p>Administrateur</p></li>
-            </ul>
-          </div>
-      </section>
-
-      <section id="evenements">
-        <div id="inscriptions">
-            <div><h2>Tes inscriptions</h2></div> 
-            <p>Tu es inscrit aux évènements suivants :</p>      
-        </div>
-
-        <div> 
-            <div>            
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/bieres.jpg" alt ="afterwork">
-                    <div class="bordureRectangleEvenement">
-                        <p>Afterwork</p>
-                        <p>12/04/2022</p>
-                    </div>
-                </a>
-                <a href="#" class="btnAvecFond">Je me désinscris <i class="fa-solid fa-xmark"></i></a>
-            </div>
-                
-            <div>
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/soiree.jpg" alt ="soiree">
-                    <div class="bordureRectangleEvenement">
-                        <p>Soirée</p>
-                        <p>8/05/2022</p>
-                    </div>
-                </a>
-                <a href="#" class="btnAvecFond">Je me désinscris <i class="fa-solid fa-xmark"></i></a>
-            </div>
-
-            <div>
-                <a href="detailsEvenement.html">
-                    <div class="rectanglePleinEvenement"></div>
-                    <img src="img/evenements/basket.jpg" alt ="basket">
-                    <div class="bordureRectangleEvenement">
-                        <p>Basket</p>
-                        <p>22/05/2022</p>
-                    </div>
-                </a>
-                <a href="#" class="btnAvecFond">Je me désinscris <i class="fa-solid fa-xmark"></i></a>
-            </div>
-        </div>
-      </section>  
-    </main>
+    <div>
+        <h1>Bonjour {{ user.getFirstName }}!</h1>
+        <span class="iconify" data-icon="icon-park-outline:people"></span>
+    </div>
 {% endblock %}
+    {% block body %}
+        <main>
+            <section id="infosPerso" style="margin-bottom: 40px;">
+                <div><h2>Tes informations personnelles</h2></div>
+                <div>
+                    <ul>
+                        <li><p>Prénom</p></li>
+                        <li><p>Nom</p></li>
+                        <li><p>Courriel</p></li>
+                        <li><p>Téléphone</p></li>
+                        <li><p>Rôle</p></li>
+                    </ul>
+                    <ul>
+                        <li><p>{{ user.getFirstName }}</p></li>
+                        <li><p>{{ user.getName }}</p></li>
+                        <li><p>{{ user.getEmail }}</p></li>
+                        <li><p>{{ user.getPhone }}</p></li>
+                        <li><p>{{ user.getRole.getName }}</p></li>
+                    </ul>
+                </div>
+            </section>
+
+            {% set isRegisteredToEvents = false %}
+            {% if isRegisteredToEvents %}
+                <section id="evenements">
+                <div id="inscriptions">
+                    <div><h2>Tes inscriptions</h2></div>
+                    <p>Tu es inscrit aux évènements suivants :</p>
+                </div>
+
+                <div>
+                    <div>
+                        <a href="detailsEvenement.html">
+                            <div class="rectanglePleinEvenement"></div>
+                            <img src="img/evenements/bieres.jpg" alt="afterwork">
+                            <div class="bordureRectangleEvenement">
+                                <p>Afterwork</p>
+                                <p>12/04/2022</p>
+                            </div>
+                        </a>
+                        <a href="#" class="btnAvecFond">Je me désinscris <i class="fa-solid fa-xmark"></i></a>
+                    </div>
+
+                    <div>
+                        <a href="detailsEvenement.html">
+                            <div class="rectanglePleinEvenement"></div>
+                            <img src="img/evenements/soiree.jpg" alt="soiree">
+                            <div class="bordureRectangleEvenement">
+                                <p>Soirée</p>
+                                <p>8/05/2022</p>
+                            </div>
+                        </a>
+                        <a href="#" class="btnAvecFond">Je me désinscris <i class="fa-solid fa-xmark"></i></a>
+                    </div>
+
+                    <div>
+                        <a href="detailsEvenement.html">
+                            <div class="rectanglePleinEvenement"></div>
+                            <img src="img/evenements/basket.jpg" alt="basket">
+                            <div class="bordureRectangleEvenement">
+                                <p>Basket</p>
+                                <p>22/05/2022</p>
+                            </div>
+                        </a>
+                        <a href="#" class="btnAvecFond">Je me désinscris <i class="fa-solid fa-xmark"></i></a>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+        </main>
+    {% endblock %}

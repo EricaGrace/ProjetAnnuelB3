@@ -7,15 +7,12 @@ use App\Entity\EventCategory;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\EventRepository;
-use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use App\Utils\Config;
 use DateTime;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends AbstractController
@@ -74,6 +71,7 @@ class AdminController extends AbstractController
     {
         $roles = $roleRepository->findAll();
         return $this->render('Administration/AjouterUtilisateur.html.twig', [
+            'action' => 'Ajouter',
             "roles" => $roles
         ]);
     }
@@ -112,6 +110,20 @@ class AdminController extends AbstractController
 
         $userRepository->save($user);
 
-        return $this->render('Administration/AjouterUtilisateur.html.twig');
+        return $this->render('Administration/AjouterUtilisateur.html.twig', [
+            'action' => 'Ajouter',
+            'messages' => ['Utilisateur ajouté']
+        ]);
+    }
+
+    #[Route(path: "/admin/user/edit/{id}", name: "user.edit")]
+    public function edit(UserRepository $userRepository, string $id)
+    {
+        $user = $userRepository->find($id);
+
+        return $this->renderIf('Administration/AjouterUtilisateur.html.twig', [
+            'user' => $user,
+            'action' => 'Modifier'
+        ], $user);
     }
 }

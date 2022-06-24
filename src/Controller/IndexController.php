@@ -33,19 +33,6 @@ class IndexController extends AbstractController
         return $this->render('index/contact.html.twig');
     }
 
-
-    #[Route(path: "/login", httpMethod: "GET", name: "login")]
-    public function login()
-    {
-        return $this->render('User/login.html.twig');
-    }
-
-    #[Route(path: "/compte", httpMethod: "GET", name: "account")]
-    public function inscription()
-    {
-        return $this->render('User/MonCompte.html.twig');
-    }
-
     #[Route(path: "/add", httpMethod: "GET", name: "evenement")]
     public function add()
     {
