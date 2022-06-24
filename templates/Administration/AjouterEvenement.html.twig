@@ -11,23 +11,31 @@
                 <ul>
                     <li>
                         <label for="title">Titre</label> <br>
-                        <input type="text" name="title" id="title" value="{{ old.get('title') ?? '' }}">
+                        <input type="text" name="title" id="title" value="{{ old.get('title') }}">
                     </li>
                     <li>
                         <label for="slug">Slug</label> <br>
-                        <input type="text" name="slug" id="slug" value="{{ old.get('slug') ?? '' }}">
+                        <input type="text" name="slug" id="slug" value="{{ old.get('slug') }}">
+                    </li>
+                    <li>
+                        <label for="category">Categorie</label><br>
+                        <select id="category" name="category">
+                            {% for category in categories %}
+                                <option value="{{ category.getId }}"> {{ category.getName }}</option>
+                            {% endfor %}
+                        </select>
                     </li>
                     <li>
                         <label for="date">Date</label> <br>
-                        <input type="date" name="date" id="date" value="{{ old.get('date') ?? '' }}">
+                        <input type="date" name="date" id="date" value="{{ old.get('date') }}">
                     </li>
                     <li>
                         <label for="price">Prix</label> <br>
-                        <input type="number" name="price" min="0" step="any" id="price" value="{{ old.get('price') ?? '' }}">
+                        <input type="number" name="price" min="0" step="any" id="price" value="{{ old.get('price') }}">
                     </li>
                     <li>
                         <label for="places">Nombre de places</label> <br>
-                        <input type="number" min="1" name="maxAttendees" step="1" id="maxAttendees" value="{{ old.get('maxAttendees') ?? '' }}">
+                        <input type="number" min="1" name="maxAttendees" step="1" id="maxAttendees" value="{{ old.get('maxAttendees') }}">
                     </li>
                     <li>Image</li>
                     <li>
@@ -38,7 +46,7 @@
                     </li>
                     <li>
                         <label for="description">Description</label> <br>
-                        <textarea name="description" id="description">{{ old.get('description') ?? '' }}</textarea>
+                        <textarea name="description" id="description">{{ old.get('description') }}</textarea>
                     </li>
                     <li>
                         <button type="submit">Ajouter <i class="fa-solid fa-plus"></i></button>

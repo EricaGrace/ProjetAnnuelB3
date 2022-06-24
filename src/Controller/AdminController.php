@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Auth\Authenticator;
 use App\Entity\Event;
-use App\Entity\EventCategory;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Entity\Venue;
+use App\Repository\EventCategoryRepository;
 use App\Repository\EventRepository;
 use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
@@ -19,22 +21,29 @@ use Symfony\Component\HttpFoundation\Request;
 class AdminController extends AbstractController
 {
     #[Route('/admin/event/add', name: 'event.add')]
-    public function addEvent()
+    public function addEvent(EventCategoryRepository $categoryRepository)
     {
-        return $this->render('Administration/AjouterEvenement.html.twig');
+        $categories = $categoryRepository->findAll();
+        return $this->render('Administration/AjouterEvenement.html.twig', [
+            'categories' => $categories
+        ]);
     }
 
     // TODO: refactoriser
     #[Route('/admin/event/add', httpMethod: 'POST')]
-    public function storeEvent(Request $request, Config $config, EventRepository $eventRepository)
+    public function storeEvent(Request $request, Config $config, EventRepository $eventRepository, EventCategoryRepository $categoryRepository, Authenticator $auth)
     {
         $post = $request->request;
         $image = $request->files->getIterator()->current();
 
+        $event = $eventRepository->findBySlug($post->get('slug'));
+        $category = $categoryRepository->find($post->get('category'));
+
         try {
             Validator::alpha()->assert($title = $post->get('title'));
             Validator::slug()->assert($slug = $post->get('slug'));
-            Validator::trueVal()->assert((bool)$eventRepository->findBySlug($post->get('slug')));
+            Validator::nullType()->assert($event);
+            Validator::trueVal()->assert((bool)$category);
             Validator::date()->assert($date = $post->get('date'));
             Validator::numericVal()->min(0)->assert($price = $post->get('price'));
             Validator::intVal()->min(0)->assert($maxAttendees = $post->get('maxAttendees'));
@@ -42,7 +51,11 @@ class AdminController extends AbstractController
             Validator::stringType()->validate($description = $post->get('description'));
         } catch (NestedValidationException $exception) {
             return $this->render('Administration/AjouterEvenement.html.twig', [
-                'messages' => $exception->getMessages(),
+                'messages' => $exception->getMessages([
+                    'nullType' => 'Un évènement existe déjà avec ce slug',
+                    'category' => 'La catégorie sélectionnée n\'existe pas'
+                ]),
+                'categories' => $categoryRepository->findAll(),
                 'old' => $post
             ]);
         }
@@ -53,18 +66,23 @@ class AdminController extends AbstractController
 
         $event = (new Event())
             ->setTitle($title)
-            ->setCategory((new EventCategory())->setId(1))
+            ->setCategory($category)
             ->setSlug($slug)
             ->setDate(new DateTime($date))
             ->setMaxAttendees($maxAttendees)
             ->setPrice($price)
-            ->setCreator((new User())->setId(1))
+            ->setCreator($auth->getAuthenticatedUser() ?: (new User())->setId(1))
             ->setDescription($description)
-            ->setImage($imagePathname);
+            ->setImage($imagePathname)
+            ->setVenue((new Venue())->setId(1));
 
         $eventRepository->save($event);
 
-        return $this->render('Administration/AjouterEvenement.html.twig');
+        return $this->render('Administration/AjouterEvenement.html.twig', [
+            'messages' => ['Evenement enregistré avec succès'],
+            'categories' => $categoryRepository->findAll(),
+            'old' => $post
+        ]);
     }
 
     #[Route('/admin/user/add', name: 'user.add')]
