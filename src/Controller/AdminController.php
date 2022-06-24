@@ -7,6 +7,7 @@ use App\Entity\EventCategory;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\EventRepository;
+use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use App\Utils\Config;
