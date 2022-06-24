@@ -49,4 +49,16 @@ final class UserRepository extends AbstractRepository
 
         return ($result !== false) ? $this->hydrate($result) : null;
     }
+
+    // TODO: redondant, peut être findByKey(string $key)
+    public function findByEmail(string $email): ?User
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM " . static::TABLE . " WHERE email=:email");
+
+        $stmt->execute(['email' => $email]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return ($result !== false) ? $this->hydrate($result) : null;
+    }
 }
