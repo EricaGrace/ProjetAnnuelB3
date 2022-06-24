@@ -3,15 +3,18 @@
 namespace App\Controller;
 
 use App\Routing\RouteNotFoundException;
+use App\Routing\Router;
 use Twig\Environment;
 
 abstract class AbstractController
 {
     protected Environment $twig;
+    protected Router $router;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, Router $router)
     {
         $this->twig = $twig;
+        $this->router = $router;
     }
 
     protected function renderIf($name, array $context = [], mixed ...$conditions)
