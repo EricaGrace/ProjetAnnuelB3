@@ -71,7 +71,9 @@ class AdminController extends AbstractController
     #[Route('/admin/user/add', name: 'user.add')]
     public function addUser()
     {
-        return $this->render('Administration/AjouterUtilisateur.html.twig');
+        return $this->render('Administration/AjouterUtilisateur.html.twig', [
+            'action' => 'Ajouter',
+        ]);
     }
 
     #[Route('/admin/user/add', httpMethod: 'POST')]
@@ -89,6 +91,7 @@ class AdminController extends AbstractController
             Validator::optional(Validator::date('d/m/Y'))->assert($post->get('birthdate'));
         } catch (NestedValidationException $exception) {
             return $this->render('Administration/AjouterUtilisateur.html.twig', [
+                'action' => 'Ajouter',
                 'messages' => $exception->getMessages(),
                 'old' => $post
             ]);
@@ -108,6 +111,20 @@ class AdminController extends AbstractController
 
         $userRepository->save($user);
 
-        return $this->render('Administration/AjouterUtilisateur.html.twig');
+        return $this->render('Administration/AjouterUtilisateur.html.twig', [
+            'action' => 'Ajouter',
+            'messages' => ['Utilisateur ajouté']
+        ]);
+    }
+
+    #[Route(path: "/admin/user/edit/{id}", name: "user.edit")]
+    public function edit(UserRepository $userRepository, string $id)
+    {
+        $user = $userRepository->find($id);
+
+        return $this->renderIf('Administration/AjouterUtilisateur.html.twig', [
+            'user' => $user,
+            'action' => 'Modifier'
+        ], $user);
     }
 }

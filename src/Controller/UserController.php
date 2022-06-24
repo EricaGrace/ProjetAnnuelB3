@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
+use App\Auth\Authenticator;
 use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use App\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserController extends AbstractController
 {
-    #[Route(path: "/users", name: "users_list")]
+    #[Route(path: "/users", name: "users.list")]
     public function list(SessionInterface $session)
     {
         $users = [];
@@ -22,10 +24,16 @@ class UserController extends AbstractController
         );
     }
 
-    #[Route(path: "/user/edit/{username}", name: "user_edit")]
-    public function edit(UserRepository $userRepository, string $username)
+    #[Route(path: "/compte", httpMethod: "GET", name: "user.account")]
+    public function account(Authenticator $authenticator)
     {
-        $user = $userRepository->findByUsername($username);
-        dump($user);
+        if (!$authenticator->isAuthenticated()) {
+            return new RedirectResponse($this->router->route('login'));
+        }
+
+        $user = $authenticator->getAuthenticatedUser();
+        return $this->renderIf('User/MonCompte.html.twig', [
+            'user' => $user
+        ], $user);
     }
 }
