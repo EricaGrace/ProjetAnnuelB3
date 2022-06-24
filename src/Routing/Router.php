@@ -2,6 +2,7 @@
 
 namespace App\Routing;
 
+use App\Application;
 use App\Routing\Attribute\Route as RouteAttribute;
 use App\Utils\Filesystem;
 use Psr\Container\ContainerInterface;
@@ -13,16 +14,16 @@ class Router
     private const CONTROLLERS_NAMESPACE = "App\\Controller\\";
     private const CONTROLLERS_DIR = __DIR__ . "/../Controller";
     /** @var Route[] */
-    private $routes = [];
-    private ContainerInterface $container;
+    private array $routes = [];
     private ArgumentResolver $argumentResolver;
+    private Application $app;
 
     public function __construct(
-        ContainerInterface $container,
+        Application        $app,
         ArgumentResolver   $argumentResolver
     )
     {
-        $this->container = $container;
+        $this->app = $app;
         $this->argumentResolver = $argumentResolver;
     }
 
@@ -42,18 +43,7 @@ class Router
             throw new RouteNotFoundException();
         }
 
-        $controllerName = $route->getController();
-        $constructorParams = $this->getMethodServiceParams($controllerName, '__construct');
-        $controller = new $controllerName(...$constructorParams);
-
-        $method = $route->getMethod();
-        $servicesParams = $this->getMethodServiceParams($controllerName, $method);
-        $getParams = $route->getGetParams();
-
-        call_user_func_array(
-            [$controller, $method],
-            array_merge($servicesParams, $getParams)
-        );
+        return $this->app->callClassMethod($route->getController(), $route->getMethod(), ...$route->getGetParams());
     }
 
     /**
@@ -75,32 +65,6 @@ class Router
         }
 
         return null;
-    }
-
-    /**
-     * Resolve method's parameters from the service container
-     *
-     * @param string $controller name of controller
-     * @param string $method name of method
-     * @return array
-     */
-    private function getMethodServiceParams(string $controller, string $method): array
-    {
-        $methodInfos = new ReflectionMethod($controller . '::' . $method);
-        $methodParameters = $methodInfos->getParameters();
-
-        $params = [];
-        foreach ($methodParameters as $param) {
-            $paramName = $param->getName();
-            $paramType = $param->getType()->getName();
-
-            $params[$paramName] = $this->container->make($paramType);
-//      if ($this->container->has($paramType)) {
-//        $params[$paramName] = $this->container->get($paramType);
-//      }
-        }
-
-        return $params;
     }
 
     public function registerRoutes(): void
@@ -156,5 +120,28 @@ class Router
         $this->routes[] = $route;
 
         return $this;
+    }
+
+    public function getRouteUriFromName(string $name, array $values = []): ?string
+    {
+        $route = $this->getRouteByName($name);
+
+        return !$route ? null : $this->argumentResolver->setGetParams($route, $values);
+
+    }
+
+    public function getRouteByName(string $name): ?Route
+    {
+        $route = array_filter($this->routes, fn(Route $route) => $route->getName() === $name);
+
+        return !empty($route) ? array_values($route)[0] : null;
+    }
+
+    /**
+     * Helper: returns the route uri from the route name and passed values
+     */
+    public function route(string $name, array $values = []): ?string
+    {
+        return $this->getRouteUriFromName($name, $values);
     }
 }

@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+
+{% block header %}
+    <div>
+        <h1>Administration</h1>
+        <span class="iconify" data-icon="bytesize:settings"></span>
+        <ul id="menu-admin">
+            <li><a href="{{ route('event.add') }}" class="menuSelectionne">Ajouter un évènement</a></li>
+            <li><a href="{{ route('event.edit') }}">Modifier un évènement</a></li>
+            <li><a href="{{ route('event.remove') }}">Supprimer un évènement</a></li>
+            <li><a href="{{ route('category.add') }}">Ajouter une catégorie</a></li>
+            <li><a href="{{ route('user.add') }}">Ajouter un utilisateur</a></li>
+            <li><a href="{{ route('user.edit', {id: 1}) }}">Modifier l'utilisateur 1</a></li>
+        </ul>
+    </div>
+{% endblock %}

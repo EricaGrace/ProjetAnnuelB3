@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Database\Hydration\Strategies\DateTimeStrategy;
+use App\Database\Hydration\Strategies\RoleStrategy;
 use App\Database\Hydration\Strategies\UserStrategy;
 use DateTime;
+use Respect\Validation\Rules\Date;
 
 class User implements Entity
 {
@@ -15,6 +17,8 @@ class User implements Entity
     private string $password;
     private string $email;
     private ?string $phone;
+
+    #[Hydrator(strategy: RoleStrategy::class)]
     private ?Role $role;
 
     #[Hydrator(strategy: DateTimeStrategy::class)]
@@ -31,9 +35,11 @@ class User implements Entity
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): string
@@ -107,6 +113,7 @@ class User implements Entity
 
         return $this;
     }
+
     public function getRole(): Role
     {
         return $this->role;

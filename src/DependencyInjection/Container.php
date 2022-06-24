@@ -11,21 +11,44 @@ use ReflectionParameter;
 class Container implements ContainerInterface
 {
     private array $services = [];
+    private array $singletons = [];
 
-    public function set(string|array $ids, $service)
+    public function callClassMethod(string|object $objectOrClass, string $method, mixed ...$values)
     {
-        foreach ((array)$ids as $id) {
-            if ($this->has($id)) {
-                throw new InvalidArgumentException(sprintf('The "%s" service is already initialized, you cannot replace it.', $id));
-            }
+        $method = (new ReflectionClass($objectOrClass))->getMethod($method);
+        $methodParameters = $method->getParameters();
+        $method = $method->name;
 
-            $this->services[$id] = $service;
-        }
+        $arguments = $this->instanciateInstanciableParameters($methodParameters);
+
+        $object = gettype($objectOrClass) === 'string' ? $this->make($objectOrClass) : $objectOrClass;
+        return $object->$method(...array_merge($arguments, $values));
     }
 
-    public function has(string $id)
+    /**
+     * @param ReflectionParameter[] $methodParameters
+     * @return array
+     */
+    private function instanciateInstanciableParameters(array $methodParameters): array
     {
-        return array_key_exists($id, $this->services);
+        $arguments = [];
+        foreach ($methodParameters as $parameter) {
+            if ($this->parameterIsAClass($parameter)) {
+                $arguments[] = $this->make($parameter->getType()->getName());
+            }
+        }
+
+        return $arguments;
+    }
+
+    private function parameterIsAClass(ReflectionParameter $parameter): bool
+    {
+        return !$this->parameterIsNotAClass($parameter);
+    }
+
+    private function parameterIsNotAClass(ReflectionParameter $parameter): bool
+    {
+        return (!$parameter->getType() || $parameter->getType()->isBuiltin());
     }
 
     public function make(mixed $id, mixed ...$arguments): ?object
@@ -33,7 +56,6 @@ class Container implements ContainerInterface
         try {
             $service = $this->get($id);
         } catch (ServiceNotFoundException) {
-            // Kernel::class
             $service = $id;
         }
 
@@ -43,7 +65,7 @@ class Container implements ContainerInterface
 
         try {
             $reflected = new ReflectionClass($service);
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             return null;
         }
 
@@ -54,22 +76,14 @@ class Container implements ContainerInterface
         $reflectedConstructor = $reflected->getConstructor();
         $constructorParameters = $reflectedConstructor ? $reflectedConstructor->getParameters() : [];
 
-        $parameters = [];
-        foreach ($constructorParameters as $parameter) {
-            if ($this->parameterIsNotAClass($parameter)) {
-                continue;
-            }
-
-            $class = $parameter->getType()->getName();
-
-            $param = $this->make($class);
-            $parameters[] = $param;
-        }
+        $parameters = $this->instanciateInstanciableParameters($constructorParameters);
 
         $instance = $reflected->newInstance(...array_merge($parameters, $arguments));
 
-        // we bind the freshly made instance to the container
-        $this->overrideKey($id, $instance);
+        if ($this->isASingleton($id)) {
+            // we bind the freshly made instance to the container if it is not registered as a singleton
+            $this->overrideKey($id, $instance);
+        }
         return $instance;
     }
 
@@ -82,14 +96,38 @@ class Container implements ContainerInterface
         return $this->services[$id];
     }
 
-    private function parameterIsNotAClass(ReflectionParameter $parameter): bool
+    public function has(string $id): bool
     {
-        return (!$parameter->getType() || $parameter->getType()->isBuiltin());
+        return array_key_exists($id, $this->services);
     }
 
-    private function overrideKey(mixed $id, object $service): void
+    private function isASingleton(mixed $id): bool
+    {
+        return array_key_exists($id, $this->singletons);
+    }
+
+    private function overrideKey(mixed $id, object|string $service): void
     {
         $this->services[$id] = $service;
     }
 
+    public function singleton(string|array $id, $service): void
+    {
+        $this->set($id, $service, true);
+    }
+
+    public function set(string|array $ids, $service, bool $singleton = false)
+    {
+        foreach ((array)$ids as $id) {
+            if ($this->has($id)) {
+                throw new InvalidArgumentException(sprintf('The "%s" service is already initialized, you cannot replace it.', $id));
+            }
+
+            $this->services[$id] = $service;
+
+            if ($singleton) {
+                $this->singletons[$id] = $service;
+            }
+        }
+    }
 }

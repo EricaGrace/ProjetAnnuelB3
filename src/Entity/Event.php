@@ -12,6 +12,7 @@ class Event implements Entity
 {
     private int $id;
     private string $title;
+    private string $slug;
 
     #[Hydrator(strategy: EventCategoryStrategy::class)]
     private EventCategory $category;
@@ -27,7 +28,7 @@ class Event implements Entity
     private User $creator;
 
     #[Hydrator(strategy: VenueStrategy::class)]
-    private Venue $venue;
+    private ?Venue $venue;
 
     public function getId(): int
     {
@@ -48,6 +49,17 @@ class Event implements Entity
     public function setTitle(string $title): Event
     {
         $this->title = $title;
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): Event
+    {
+        $this->slug = $slug;
         return $this;
     }
 

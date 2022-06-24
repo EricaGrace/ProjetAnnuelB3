@@ -10,10 +10,7 @@ if (
 }
 
 use App\Application;
-use App\Routing\RouteNotFoundException;
-use App\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Environment;
 
 $app = new Application(dirname(__DIR__));
 $kernel = $app->bindKernel();
@@ -21,14 +18,7 @@ $kernel = $app->bindKernel();
 $app->bootstrap($kernel->getBootstrapers());
 
 $request = Request::createFromGlobals();
-$app->set([Request::class, 'request'], $request);
+$app->singleton([Request::class, 'request'], $request);
 
-$requestUri = $request->server->get('REQUEST_URI');
-$requestMethod = $request->server->get('REQUEST_METHOD');
-
-try {
-    $app->make(Router::class)->execute($requestUri, $requestMethod);
-} catch (RouteNotFoundException $e) {
-    http_response_code(404);
-    echo $app->make(Environment::class)->render('404.html.twig', ['title' => $e->getMessage()]);
-}
+$response = $kernel->handle($request);
+$response->send();

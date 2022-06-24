@@ -50,7 +50,7 @@ class Application extends DependencyInjection\Container
 
         foreach ($aliases as $key => $alias) {
             foreach ($alias as $alia) {
-                $this->set([$key], $alia);
+                $this->singleton([$key], $alia);
             }
         }
     }

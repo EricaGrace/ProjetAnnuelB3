@@ -11,8 +11,8 @@ class Venue implements Entity
     private string $city;
     private int $postalCode;
     private string $country;
-    private float $latitude;
-    private float $longitude;
+    private ?float $latitude;
+    private ?float $longitude;
 
     public function getId(): int
     {
@@ -96,7 +96,7 @@ class Venue implements Entity
         return $this->latitude;
     }
 
-    public function setLatitude(float $latitude): Venue
+    public function setLatitude(?float $latitude): Venue
     {
         $this->latitude = $latitude;
         return $this;
@@ -107,7 +107,7 @@ class Venue implements Entity
         return $this->longitude;
     }
 
-    public function setLongitude(float $longitude): Venue
+    public function setLongitude(?float $longitude): Venue
     {
         $this->longitude = $longitude;
         return $this;

@@ -1,76 +1,142 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      {% block head %}
+<head>
+    {% block head %}
         <meta charset="UTF-8">
         <title>{% block title %}BDE Platform{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="/img/logos/favicon.ico">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Neucha&family=Open+Sans&display=swap" rel="stylesheet">
-         {% block link %}{% endblock %}
+        {% block link %}{% endblock %}
         <link rel="stylesheet" href="/css/normalize.css">
         <link rel="stylesheet" href="/css/base.css">
         <link rel="stylesheet" href="/css/all.css">
         <link rel="stylesheet" href="/css/style.css">
-        {% endblock %}
-    </head>
-    <body>
-    <header>
-        <nav>
-                <a href="index.html">
-                    <img src="img/logos/logo_colore.png" alt="logo">
-                    <p><span>BDE</span> Platform</p>
-                </a>
-                <ul>
-                    <li><a href="evenementsCategorie.html">Afterwork</a></li>
-                    <li><a href="evenementsCategorie.html">Intégration</a></li>
-                    <li><a href="evenementsCategorie.html">Soirée</a></li>
-                    <li><a href="evenementsCategorie.html">Sport</a></li>
-                    <li><a href="Connexion/login.html.twig" class="btnSansFond">Je me connecte <i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
-                    <li><a href="inscription/inscription.html.twig" class="btnAvecFond">Je m'inscris <i class="fa-solid fa-pencil"></i></a></li>
-                </ul>
-        </nav>
-        {% block header %} {% endblock %} 
+    {% endblock %}
+</head>
+<body>
+<header>
+    <nav>
+        <a href="{{ route('home') }}">
+            <img src="/img/logos/logo_colore.png" alt="logo">
+            <p><span>BDE</span> Platform</p>
+        </a>
+        <div class="toggle">
+            <i class="fa-solid fa-bars ouvrir"></i>
+            <i class="fa-solid fa-xmark fermer"></i>
+        </div>
+        <ul class="menu">
+            {% for category in global.categories %}
+                <li><a href="{{ route('event.category', {slug: category.slug}) }}">{{ category.name }}</a></li>
+            {% endfor %}
+            {% if not auth.isAuthenticated %}
+                <li>
+                    <a href="{{ route('login') }}" class="btnSansFond">
+                        Je me connecte <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('signup') }}" class="btnAvecFond">
+                        Je m'inscris <i class="fa-solid fa-pencil"></i>
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ route('user.account') }}" class="btnSansFond">
+                        Mon compte
+                        <i class="fa-solid fa-arrow-up-left-from-circle"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('logout') }}" class="btnSansFond">
+                        Déconnexion
+                        <i class="fa-solid fa-arrow-up-left-from-circle"></i>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% block header %} {% endblock %}
 </header>
-        {% block pagetitle %}{% endblock %}
-        
+{% block pagetitle %}{% endblock %}
 
-        {% block javascripts %}{% endblock %}
-        
-        {% block body %}{% endblock %}
 
-        <footer>
-        {% block footer %}
+
+
+{% block body %}
+{% endblock %}
+
+<footer>
+    {% block footer %}
         <div class="bordureRectangle"></div>
         <div class="bordureRectangle"></div>
         <div>
-        <a href="#"><img src="img/logos/logo_blanc.png" alt="logo"></a>
-        <ul>
-            <li><p>Contact</p></li>
-            <li><p>exemple@mail.com</p></li>
-            <li><p>07 88 26 84 69</p></li>
-            <li><p>53 cours Albert Thomas, 69000 Lyon</p></li>
-        </ul>
-        <ul>
-            <li><a href="evenementsCategorie.html">Afterwork</a></li>
-            <li><a href="evenementsCategorie.html">Intégration</a></li>
-            <li><a href="evenementsCategorie.html">Soirée</a></li>
-            <li><a href="evenementsCategorie.html">Sport</a></li>
-        </ul>
+            <a href="{{ route('home') }}"><img src="/img/logos/logo_blanc.png" alt="logo"></a>
+            <ul>
+                <li><p>Contact</p></li>
+                <li><p>exemple@mail.com</p></li>
+                <li><p>07 88 26 84 69</p></li>
+                <li><p>53 cours Albert Thomas, 69000 Lyon</p></li>
+            </ul>
+            <ul>
+                {% for category in global.categories %}
+                    <li><a href="{{ route('event.category', {slug: category.slug}) }}">{{ category.name }}</a></li>
+                {% endfor %}
+            </ul>
 
-        <ul>
-          <li><a href="connexion.html" class="btnSansFond">Je me connecte <i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
-          <li><a href="inscription.html" class="btnSansFond">Je m'inscris <i class="fa-solid fa-pencil"></i></a></li>
-            <li>
-                <a href="index.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="30" height="30" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"><path fill="currentColor" d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131c.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/></svg></a>
-                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="30" height="30" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.465 1.066C8.638 1.012 9.012 1 12 1c2.988 0 3.362.013 4.534.066c1.172.053 1.972.24 2.672.511c.733.277 1.398.71 1.948 1.27c.56.549.992 1.213 1.268 1.947c.272.7.458 1.5.512 2.67C22.988 8.639 23 9.013 23 12c0 2.988-.013 3.362-.066 4.535c-.053 1.17-.24 1.97-.512 2.67a5.396 5.396 0 0 1-1.268 1.949c-.55.56-1.215.992-1.948 1.268c-.7.272-1.5.458-2.67.512c-1.174.054-1.548.066-4.536.066c-2.988 0-3.362-.013-4.535-.066c-1.17-.053-1.97-.24-2.67-.512a5.397 5.397 0 0 1-1.949-1.268a5.392 5.392 0 0 1-1.269-1.948c-.271-.7-.457-1.5-.511-2.67C1.012 15.361 1 14.987 1 12c0-2.988.013-3.362.066-4.534c.053-1.172.24-1.972.511-2.672a5.396 5.396 0 0 1 1.27-1.948a5.392 5.392 0 0 1 1.947-1.269c.7-.271 1.5-.457 2.67-.511zm8.98 1.98c-1.16-.053-1.508-.064-4.445-.064c-2.937 0-3.285.011-4.445.064c-1.073.049-1.655.228-2.043.379c-.513.2-.88.437-1.265.822a3.412 3.412 0 0 0-.822 1.265c-.151.388-.33.97-.379 2.043c-.053 1.16-.064 1.508-.064 4.445c0 2.937.011 3.285.064 4.445c.049 1.073.228 1.655.379 2.043c.176.477.457.91.822 1.265c.355.365.788.646 1.265.822c.388.151.97.33 2.043.379c1.16.053 1.507.064 4.445.064c2.938 0 3.285-.011 4.445-.064c1.073-.049 1.655-.228 2.043-.379c.513-.2.88-.437 1.265-.822c.365-.355.646-.788.822-1.265c.151-.388.33-.97.379-2.043c.053-1.16.064-1.508.064-4.445c0-2.937-.011-3.285-.064-4.445c-.049-1.073-.228-1.655-.379-2.043c-.2-.513-.437-.88-.822-1.265a3.413 3.413 0 0 0-1.265-.822c-.388-.151-.97-.33-2.043-.379zm-5.85 12.345a3.669 3.669 0 0 0 4-5.986a3.67 3.67 0 1 0-4 5.986zM8.002 8.002a5.654 5.654 0 1 1 7.996 7.996a5.654 5.654 0 0 1-7.996-7.996zm10.906-.814a1.337 1.337 0 1 0-1.89-1.89a1.337 1.337 0 0 0 1.89 1.89z" fill="currentColor"/></g></svg></a>
-                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="30" height="30" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"><path fill="currentColor" d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z"/></svg></a>  
-            </li>
-        </ul>
-     </div>
 
-     {% endblock %}
-     </footer>
-    </body>
+            <ul>
+                {% if not auth.isAuthenticated %}
+                    <li>
+                        <a href="{{ route('login') }}" class="btnSansFond">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('signup') }}" class="btnSansFond">Je m'inscris <i
+                                    class="fa-solid fa-pencil"></i></a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ route('login') }}" class="btnSansFond">
+                            Déconnexion
+                            <i class="fa-solid arrow-up-left-from-circle"></i>
+                        </a>
+                    </li>
+                {% endif %}
+                <li>
+                    <a href="{{ route('home') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="30" height="30"
+                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16">
+                            <path fill="currentColor"
+                                  d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131c.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+                        </svg>
+                    </a>
+                    <a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="30" height="30"
+                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                            <g fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M7.465 1.066C8.638 1.012 9.012 1 12 1c2.988 0 3.362.013 4.534.066c1.172.053 1.972.24 2.672.511c.733.277 1.398.71 1.948 1.27c.56.549.992 1.213 1.268 1.947c.272.7.458 1.5.512 2.67C22.988 8.639 23 9.013 23 12c0 2.988-.013 3.362-.066 4.535c-.053 1.17-.24 1.97-.512 2.67a5.396 5.396 0 0 1-1.268 1.949c-.55.56-1.215.992-1.948 1.268c-.7.272-1.5.458-2.67.512c-1.174.054-1.548.066-4.536.066c-2.988 0-3.362-.013-4.535-.066c-1.17-.053-1.97-.24-2.67-.512a5.397 5.397 0 0 1-1.949-1.268a5.392 5.392 0 0 1-1.269-1.948c-.271-.7-.457-1.5-.511-2.67C1.012 15.361 1 14.987 1 12c0-2.988.013-3.362.066-4.534c.053-1.172.24-1.972.511-2.672a5.396 5.396 0 0 1 1.27-1.948a5.392 5.392 0 0 1 1.947-1.269c.7-.271 1.5-.457 2.67-.511zm8.98 1.98c-1.16-.053-1.508-.064-4.445-.064c-2.937 0-3.285.011-4.445.064c-1.073.049-1.655.228-2.043.379c-.513.2-.88.437-1.265.822a3.412 3.412 0 0 0-.822 1.265c-.151.388-.33.97-.379 2.043c-.053 1.16-.064 1.508-.064 4.445c0 2.937.011 3.285.064 4.445c.049 1.073.228 1.655.379 2.043c.176.477.457.91.822 1.265c.355.365.788.646 1.265.822c.388.151.97.33 2.043.379c1.16.053 1.507.064 4.445.064c2.938 0 3.285-.011 4.445-.064c1.073-.049 1.655-.228 2.043-.379c.513-.2.88-.437 1.265-.822c.365-.355.646-.788.822-1.265c.151-.388.33-.97.379-2.043c.053-1.16.064-1.508.064-4.445c0-2.937-.011-3.285-.064-4.445c-.049-1.073-.228-1.655-.379-2.043c-.2-.513-.437-.88-.822-1.265a3.413 3.413 0 0 0-1.265-.822c-.388-.151-.97-.33-2.043-.379zm-5.85 12.345a3.669 3.669 0 0 0 4-5.986a3.67 3.67 0 1 0-4 5.986zM8.002 8.002a5.654 5.654 0 1 1 7.996 7.996a5.654 5.654 0 0 1-7.996-7.996zm10.906-.814a1.337 1.337 0 1 0-1.89-1.89a1.337 1.337 0 0 0 1.89 1.89z"
+                                      fill="currentColor"/>
+                            </g>
+                        </svg>
+                    </a>
+                    <a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="30" height="30"
+                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16">
+                            <path fill="currentColor"
+                                  d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z"/>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    {% endblock %}
+</footer>
+{% block javascripts %} {% endblock %}
+<script src="http://localhost:8000/js/main.js" defer></script>
+</body>
 </html>

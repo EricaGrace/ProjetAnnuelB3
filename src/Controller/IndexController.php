@@ -2,50 +2,41 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Repository\EventRepository;
 use App\Routing\Attribute\Route;
-use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 
 class IndexController extends AbstractController
 {
-  #[Route(path: "/", httpMethod: "GET")]
-  public function index(Request $request)
-  {
-    echo $this->twig->render('index.html.twig', [
-        'request' => $request
-    ]);
-  }
+    #[Route(path: "/", httpMethod: "GET", name: 'home')]
+    public function index(Request $request, EventRepository $eventRepository)
+    {
+        $events = $eventRepository->findAll();
 
-  #[Route(path: "/contact", httpMethod: "GET", name: "contact")]
-  public function contactForm()
-  {
-    echo $this->twig->render('index/contact.html.twig');
-  }
+        return $this->renderIf('index.html.twig', [
+            'request' => $request,
+            'events' => $events
+        ], $events);
+    }
 
-  #[Route(path: "/contact", httpMethod: "POST", name: "handleContact")]
-  public function handleContactForm(Request $request)
-  {
-    $query = $request->request->all();
+    #[Route(path: "/contact", httpMethod: "GET", name: "contact")]
+    public function contactForm()
+    {
+        return $this->render('index/contact.html.twig');
+    }
 
-    echo '<pre>';
-    var_dump($query);
-    echo '</pre>';
-    echo $this->twig->render('index/contact.html.twig');
-  }
+    #[Route(path: "/contact", httpMethod: "POST", name: "handleContact")]
+    public function handleContactForm(Request $request)
+    {
+        $query = $request->request->all();
 
-  
-  #[Route(path: "/login", name: "login", httpMethod: "GET")]
-  public function login()
-  {
-    echo $this->twig->render('connexion/login.html.twig');
-  }
+        return $this->render('index/contact.html.twig');
+    }
 
-  #[Route(path: "/compte", name: "MonCompte", httpMethod: "GET")]
-  public function inscription()
-  {
-    echo $this->twig->render('MonCompte/MonCompte.html.twig');
-  }
+    #[Route(path: "/add", httpMethod: "GET", name: "evenement")]
+    public function add()
+    {
+        return $this->render('Administration/AjouterEvenement.html.twig');
+    }
 }
   

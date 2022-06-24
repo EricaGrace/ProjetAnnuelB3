@@ -7,3 +7,4 @@
 /.phpunit.cache/
 /coverage/
 composer.lock
+/public/uploads/img

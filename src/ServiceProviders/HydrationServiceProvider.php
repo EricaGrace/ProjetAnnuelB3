@@ -10,7 +10,7 @@ class HydrationServiceProvider extends ServiceProvider
 
     function register(): void
     {
-        $this->app->set([HydratorInterface::class, Hydrator::class], Hydrator::class);
+        $this->app->singleton([HydratorInterface::class, Hydrator::class], Hydrator::class);
     }
 
     function boot()

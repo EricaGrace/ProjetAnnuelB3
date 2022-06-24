@@ -2,20 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Auth\Authenticator;
 use App\Repository\UserRepository;
 use App\Routing\Attribute\Route;
 use App\Session\SessionInterface;
-use DateTime;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserController extends AbstractController
 {
-    #[Route(path: "/users", name: "users_list")]
+    #[Route(path: "/users", name: "users.list")]
     public function list(SessionInterface $session)
     {
         $users = [];
 
-        echo $this->twig->render(
+        echo $this->render(
             'user/list.html.twig',
             [
                 'users' => $users,
@@ -24,27 +24,16 @@ class UserController extends AbstractController
         );
     }
 
-    #[Route(path: "/user/edit/{id}", name: "user_edit")]
-    public function edit(UserRepository $userRepository, int $id)
+    #[Route(path: "/compte", httpMethod: "GET", name: "user.account")]
+    public function account(Authenticator $authenticator)
     {
-        $user = $userRepository->find($id);
-        dump($user);
-    }
+        if (!$authenticator->isAuthenticated()) {
+            return new RedirectResponse($this->router->route('login'));
+        }
 
-    #[Route(path: "/user/add", name: "add_user")]
-    public function addUser(UserRepository $userRepository)
-    {
-        $user = new User();
-
-        $user->setName("Bob")
-            ->setFirstName("John")
-            ->setUsername("Bobby")
-            ->setPassword("randompass")
-            ->setEmail("bob@bob.com")
-            ->setBirthDate(new DateTime('now'));
-
-        $userRepository->save($user);
-
-        echo "User saved";
+        $user = $authenticator->getAuthenticatedUser();
+        return $this->renderIf('User/MonCompte.html.twig', [
+            'user' => $user
+        ], $user);
     }
 }

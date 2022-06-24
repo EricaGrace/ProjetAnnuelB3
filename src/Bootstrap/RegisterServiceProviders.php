@@ -35,7 +35,7 @@ class RegisterServiceProviders extends Bootstrapper
     {
         foreach ($services as $service) {
             if (method_exists($service, 'boot')) {
-                $service->boot();
+                $this->app->callClassMethod($service, 'boot');
             }
         }
     }
