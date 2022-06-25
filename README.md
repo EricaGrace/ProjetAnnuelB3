@@ -396,6 +396,13 @@ return $this->renderIf('Evenement/EvenementCategorie.html.twig', [
 ], $category); // On peut ajouter autant de conditions que voulu
 ````
 
+### Authenticator
+
+Pour gérer l'authentification, on a créé une classe `Authenticator`. L'authenticator utilise la classe session créée pendant le module MVC. Authenticator expose une methode `authenticate` qui met en session l'ID de l'utilisateur connecté. 
+`logout()` détruit la session. Des méthodes utilitaires ont été créées pour être utilisée dans les controlleurs par exemple, ou directement dans le twig comme `isAuthenticated()` et `getAuthenticatedUser()`.
+
+On a utilisé ces méthodes avec la route POST /logout par exemple qui logout l'utilisateur.
+
 ## Pour aller plus loin:
 
 - Ajouter la notation 'dot' à la classe Config avec le package php-dot-notation
