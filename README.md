@@ -8,7 +8,7 @@ Le projet se base sur l'application créée durant le cours PHP mvc from scratch
 le `index.php`. Les services sont instanciés manuellement puis stockés dans le container qui n'est qu'un simple tableau
 associatif qui stocke des objets et lance une erreur lorsqu'un service n'est pas trouvé.
 
-Après avoir instancié le routeur, il parcoure le répertoire des controlleurs et enregistre les routes stockées sous
+Après avoir instancié le routeur, il parcourt le répertoire des controlleurs et enregistre les routes stockées sous
 forme d'annotations.
 
 Ensuite, l'uri et la méthode de la requete sont passées au routeur. Il dispose d'un `ArgumentResolver` afin de matcher
@@ -398,7 +398,7 @@ return $this->renderIf('Evenement/EvenementCategorie.html.twig', [
 
 ## Pour aller plus loin:
 
-- add dot notation to config class using the php dot notation package
+- Ajouter la notation 'dot' à la classe Config avec le package php-dot-notation
 - Passer un callable PHP au routeur plutôt que deux paramètres :
 
 ````php
@@ -417,3 +417,4 @@ $router->addRoute(new Route('/test-index', [IndexController::class, "indextest"]
 
 - Ajouter des middlewares
 - Extraire la logique de validation des Entités hors des Controllers.
+- Faire un Query Builder
