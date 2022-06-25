@@ -1,14 +1,40 @@
 # Projet Annuel
 
+--------
 
-## Changelog
+## État des lieux au moment du début du projet
+
+Le projet se base sur l'application créée durant le cours PHP mvc from scratch. L'application est bootstrappée dans
+le `index.php`. Les services sont instanciés manuellement puis stockés dans le container qui n'est qu'un simple tableau
+associatif qui stocke des objets et lance une erreur lorsqu'un service n'est pas trouvé.
+
+Après avoir instancié le routeur, il parcoure le répertoire des controlleurs et enregistre les routes stockées sous
+forme d'annotations.
+
+Ensuite, l'uri et la méthode de la requete sont passées au routeur. Il dispose d'un `ArgumentResolver` afin de matcher
+l'uri à la route. Si une route est trouvée, le routeur appelle le controlleur associé en lui injectant ses dépendances.
+Enfin, le controlleur effectue sa logique, puis fait un echo d'une template twig avec `$this->twig->render()`.
 
 ### Remaniement de l'application
 
-On a séparé le bootstrapping de notre application (= les services qui sont absolument nécessaire au fonctionnement le plus basique de notre application), par des 'Bootstrappers'.
+Au début du projet, beaucoup de choses se passaient dans le `index.php`, et notre application ne disposait pas d'un vrai
+Container. On a donc créé une classe `Application`, qui extend notre container.
 
-La méthode `getMethodServiceParams()` du routeur a été extraite en une fonction du container `Container::make()` pour resolver nos dépendances AUTOMATIQUEMENT, en injectant toute dépendance requise dans le constructeur de la classe.
-> Attention, cela a rendu notre container non conforme à psr-11. La méthode `get` devrait prendre l'implémentation de `make` pour être conforme. Ce n'est pas encore le cas pour des raisons de compatibilité. Du refactoring reste à faire.
+### IoC Container
+
+On a ajouté une fonction `Container::make()` au Container pour resolver nos dépendances AUTOMATIQUEMENT, en injectant
+toute dépendance requise dans le constructeur de la classe. La méthode est récursive, afin de résoudre autant de fois
+qu'il faut les dépendances. On obtient alors un réel IoC Container, càd avec une inversion de contrôle. Les classes sont
+automatiquement créées, dès lors que l'on a besoin d'elles (= type-hinting).
+> Attention, la méthode `make()` a rendu notre container non conforme à psr-11. La méthode `get` devrait prendre l'implémentation de `make` pour être conforme. Ce n'est pas encore le cas pour des raisons de compatibilité. Du refactoring reste à faire.
+
+Comme on souhaite également type-hinter des Interfaces, le container expose une méthode `set()`, qui indique au
+container la façon de résolver l'interface.
+
+### Bootstrapping
+
+On a séparé le bootstrapping de notre application (= les services qui sont absolument nécessaire au fonctionnement le
+plus basique de notre application), par des 'Bootstrappers'.
 
 Les service providers nous permettent, au lieu de faire ça:
 
@@ -16,9 +42,11 @@ Les service providers nous permettent, au lieu de faire ça:
 // index.php
 $router = new Router($container, new ArgumentResolver());
 $router->registerRoutes();
+
+$container->set(RouterInterface::class, $router);
 ````
 
-De créer un service provider puis de pouvoir récupérer le routeur depuis
+De créer un service provider puis de pouvoir récupérer le routeur via le container.
 
 ````php
 // RoutesServiceProvider.php
@@ -26,21 +54,34 @@ class RoutesServiceProvider extends ServiceProvider
 {
     function register(): void
     {
-        $this->app->set([Router::class, 'router'], Router::class);
+        $this->app->set(RouterInterface::class, Router::class);
     }
     
     function boot()
     {
-        $router = $app->make('router');
+        $router = $app->make(RouterInterface::class);
         $router->registerRoutes();
     }
 }
 ````
 
-Service providers : classes USED by our app Bootstrappers : service providers REQUIRED by our app
+- Service providers : classes utilisées par by our app qui ne sont pas automatiquement résolvées par le container, ou/et
+  qui ont besoin d'effectuer une action avant d'être opérationnels (ex: le routeur doit register les routes dès sa
+  création pour être utilisable)
+- Bootstrappers : service providers requis/indissociables de notre application
 
-Séparer les service providers des bootstrappers permet de pouvoir réutiliser la code 'project-agnostic' sur un autre
-projet à la manière d'un framework.
+Séparer les service providers des bootstrappers permet de pouvoir réutiliser le code qui est 'project-agnostic' sur un
+autre projet à la manière d'un framework.
+
+### Requête
+
+On a utilisé HTTP Foundation afin d'obtenir un objet Request plus agréable à manipuler que les variables globales de
+PHP. On l'a bindé au container.
+
+### Kernel
+
+Enfin, on a créé un kernel qui dans le futur, manipulera la Request et la fera (idéalement) passer par des middlewares
+avec le pattern chaine de responsabilité.
 
 ### Hydratation des données :
 
@@ -48,7 +89,8 @@ Pour l'hydratation des données, on a créé un Hydrator implémentant HydratorI
 dans tous les repositories par notre container. Il expose une méthode `hydrate(array $values, object $object)` qui,
 appelée dans un repository, retourne l'objet hydraté.
 
-Pour ce faire, il parcoure le tableau de `$values` et pour chaque valeur, trouve sa propriété et devine son setter.  
+Pour ce faire, il parcoure le tableau de `$values` et pour chaque valeur, trouve sa propriété et devine son setter.
+
 Avant d'appeler ce setter, il regarde si un attribut "Hydrator" existe sur la propriété.
 
 Enfin, si aucun setter n'est trouvé et que l'attribut Hydrator n'est pas défini, l'hydrateur essaiera en dernier recours
@@ -66,7 +108,7 @@ class User
 }
 ````
 
-L'attribut Hydrator définit une stratégie. Chaque Stratégie est une classe implémentant
+L'attribut Hydrator définit une stratégie (pattern Strategy). Chaque Stratégie est une classe implémentant
 l'interface `App\Database\Hydration\Strategies\StrategyInterface`. Les stratégies exposent donc elles aussi et à coup
 sûr, une méthode `hydrate()`.
 
@@ -91,7 +133,7 @@ class DateTimeStrategy implements StrategyInterface
 
 ---
 
-### Les stratégies sont automatiquement créés par le container, ce qui nous offre une grande flexibilité :
+### Les stratégies sont automatiquement créées par le container, ce qui nous offre une grande flexibilité :
 
 > **Par exemple:**   
 > Pour instaurer un système de parrainage, on peut ajouter à la table 'user' de la bdd une colonne 'parrain' qui détient une clé étrangère vers l'id d'un autre utilisateur.
@@ -135,10 +177,11 @@ class DateTimeStrategy implements StrategyInterface
 >
 > ![dump](docs/hydration-user.png)
 
-À noter que cette façon d'hydrater fonctionne bien, mais "provoque" le problème n+1 Si l'on récupère 10 Users, on
-effectuera la requette principale avec le `findAll()` de l'AbstractRepository, + 10 autres requêtes pour récupérer les
-parrains. Soit n+1 requêtes. Sur 10 users, cela reste négligeable, mais l'entité Event possède des références vers
-EventCategory, User, et Venue...
+À noter que cette façon d'hydrater fonctionne bien, mais "provoque" le problème n+1.
+
+Si l'on récupère 10 Users, on effectuera la requette principale avec le `findAll()` de l'AbstractRepository, + 10 autres
+requêtes pour récupérer les parrains. Soit n+1 requêtes. Sur 10 users, cela reste négligeable, mais l'entité Event par
+exemlple possède des références vers EventCategory, User et Venue...
 
 ### Kernel, Response & PSR-7
 
@@ -196,22 +239,26 @@ $twig->addFunction(new TwigFunction('route', fn(...$params) => $router->getRoute
 
 La fonction `getRouteUriFromName()` et donc `route()` dans le contexte de twig prend deux paramètres: le nom de la
 route, puis un tableau associatif de valeurs.
-`getRouteUriFromName` retrouvera la route, et remplira automatiquement l'uri avec les valeurs passées par exemple :
+`getRouteUriFromName` retrouvera la route et remplira automatiquement l'uri avec les valeurs passées par exemple :
 
 Ce qui nous permet de faire :
 
 ````php
 // dans le contexte de php:
+$router->route('blog'); // donera '/blog'
+// OU ENCORE
 $router->route('user_edit', ['id' => 12]) // donnera '/user/edit/1'
 
 // dans le contexte twig:
 {{ route('user_edit', {'id': 12}) }} // donnera '/user/edit/1'
 ````
 
+Si aucune route n'est trouvée, la fonction renverra simplement null.
+
 ### Principe de responsabilité unique : refactoring du routeur
 
-Jusqu'à présent, notre routeur ne respectait pas le principe de responsabilité unique. En effet, instanciait le
-controller associé et appellait la méthode en lui injectant ses dépendances.
+Jusqu'à présent, notre routeur ne respectait pas le principe de responsabilité unique. En effet, il instanciait le
+controller et appelait la méthode associée à la route en lui injectant ses dépendances.
 
 On a alors extrait cette responsabilité en la donnant au Container via une méthode `callClassMethod`. Cela aura permis
 de réduire de 11 lignes la méthode `execute()` du routeur, et de supprimer totalement la
@@ -231,12 +278,12 @@ paramètre facultatif `bool $singleton = false`.
 
 Si l'on passe `true` à ce paramètre, `set()` enregistrera le service dans un tableau supplémentaire $singleton.
 
-Ce sera ensuite lors de la résolution avec `make()` que le container décidera s'il doit enregistrer l'objet instancié
-dans ses services ou non.
+Ce sera ensuite lors de la résolution avec `make()` que le container décidera s'il doit enregistrer l'objet instancié ou
+non.
 
 On peut désormais `register()` les services providers avec la méthode `singleton()`. Par exemple, le routeur qui a
 besoin de rester le même à chaque fois puisqu'il détient les routes et qu'on ne souhaite pas rappeler la fonction
-registerRoutes() à chaque fois que l'on résolve le routeur.
+`registerRoutes()` (qui est couteuse en termes de performance) à chaque fois que l'on résolve le routeur.
 
 ````php
 class RoutesServiceProvider extends ServiceProvider
@@ -255,8 +302,8 @@ class RoutesServiceProvider extends ServiceProvider
 }
 ````
 
-Dorénavant, appeler `set()` aura comme comportement par défaut de ne PAS faire de singleton, et les objets seront
-instanciés à chaque fois qu'il seront résolvés.
+Dorénavant, appeler `set()` aura comme comportement par défaut de ne PAS faire de singleton : les classes seront
+instanciés à chaque fois qu'elles seront résolvés.
 
 ### DI des méthodes boot des Service Providers
 
@@ -309,7 +356,7 @@ return $this->twig->render('404.html.twig');
 Mais la syntaxe est extrêmement verbeuse et répéter cette logique dans chaque méthode serait une énorme perte de temps,
 en plus de ne pas être DRY. Et c'est sans compter les conséquences qu'auraient le changement de moteur de templating.
 
-Au lieu de ça, on a choisi de créer dans le AbstractController, trois méthodes.
+Au lieu de ça, on a choisi de créer dans le AbstractController, trois méthodes :
 
 - `return404()`
 - `render()`
@@ -338,7 +385,7 @@ absolument rien à changer.
 Enfin, `renderIf()` permet de conditionner le rendu. Si les conditions passent, alors elle appellera `render()`. Sinon,
 elle appellera `return404()` au premier échec.
 
-Toutes ces méthodes nous permettent de remplacer le code de plus haut, par un code plus efficace, lisible et versatile :
+Toutes ces méthodes nous permettent de remplacer le code de plus haut, par un code plus efficace, lisible et versatile :
 
 ````php
 // EventsController.php
@@ -353,6 +400,7 @@ return $this->renderIf('Evenement/EvenementCategorie.html.twig', [
 
 - add dot notation to config class using the php dot notation package
 - Passer un callable PHP au routeur plutôt que deux paramètres :
+
 ````php
 // Instead of this : 
 $router->addRoute(new Route('/test-index', IndexController::class, "indextest"));
@@ -366,5 +414,6 @@ $router->addRoute(new Route('/test-index', function() {
 $router->addRoute(new Route('/test-index', [IndexController::class, "indextest"]));
 
 ````
+
 - Ajouter des middlewares
 - Extraire la logique de validation des Entités hors des Controllers.
